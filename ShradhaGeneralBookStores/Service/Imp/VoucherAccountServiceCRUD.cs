@@ -43,7 +43,17 @@ namespace ShradhaGeneralBookStores.Service.Imp
             }
         }
 
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public dynamic Get(int accountId, int voucherId) => _databaseContext.VoucherAccounts.FirstOrDefault(va => va.AccountId == accountId && va.VoucherId == voucherId)!;
+
+        public dynamic Get(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public dynamic Read() => _databaseContext.VoucherAccounts;
 

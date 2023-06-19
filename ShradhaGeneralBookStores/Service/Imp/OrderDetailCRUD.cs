@@ -43,7 +43,17 @@ namespace ShradhaGeneralBookStores.Service.Imp
             }
         }
 
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public dynamic Get(int orderId, int productId) => _databaseContext.OrderDetails.FirstOrDefault(od => od.OrderId == orderId && od.ProductId == productId)!;
+
+        public dynamic Get(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public dynamic Read() => _databaseContext.OrderDetails;
 

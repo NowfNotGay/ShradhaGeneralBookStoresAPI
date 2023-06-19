@@ -1,4 +1,6 @@
 using ShradhaGeneralBookStores.Models;
+using ShradhaGeneralBookStores.Service.Imp;
+using ShradhaGeneralBookStores.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//di container
+builder.Services.AddScoped<IServiceCRUD<Account>,AccoutServiceCRUD>();
+builder.Services.AddScoped<IServiceCRUD<AccountRole>, AccountRoleCRUD>();
+builder.Services.AddScoped<IServiceCRUD<AddressProfile>, AddressProfileCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Author>, AuthorCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Category>, CategoryCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Event>, EventCRUD>();
+builder.Services.AddScoped<IServiceCRUD<EventDetail>, EventDetailCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Invoice>, InvoiceCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Order>, OrderCRUD>();
+builder.Services.AddScoped<IServiceCRUD<OrderDetail>, OrderDetailCRUD>();
+builder.Services.AddScoped<IServiceCRUD<OrderStatus>, OrderStatusCRUD>();
+builder.Services.AddScoped<IServiceCRUD<PaymentMethod>, PaymentMethodCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Product>, ProductCRUD>();
+builder.Services.AddScoped<IServiceCRUD<ProductAuthor>, ProductAuthorCRUD>();
+builder.Services.AddScoped<IServiceCRUD<ProductCategory>, ProductCategoryCRUD>();
+builder.Services.AddScoped<IServiceCRUD<ProductImage>, ProductImageCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Publisher>, PublisherCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Review>, ReviewCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Role>, RoleCRUD>();
+builder.Services.AddScoped<IServiceCRUD<Voucher>, VoucherCRUD>();
+builder.Services.AddScoped<IServiceCRUD<VoucherAccount>, VoucherAccountServiceCRUD>();
+
 builder.Services.AddScoped<DatabaseContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
