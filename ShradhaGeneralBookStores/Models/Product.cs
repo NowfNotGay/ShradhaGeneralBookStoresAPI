@@ -19,6 +19,9 @@ public partial class Product
 
     public int Cost { get; set; }
 
+    public bool Status { get; set; }
+    public bool Hot { get; set; }
+
     public int? PublisherId { get; set; }
 
     public string? PublishingYear { get; set; }
