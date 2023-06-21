@@ -349,9 +349,6 @@ public partial class DatabaseContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasColumnType("ntext");
-            entity.Property(e => e.IdOfPublisher)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.Name).HasMaxLength(200);
             entity.Property(e => e.PublishingYear)
                 .HasMaxLength(10)

@@ -1,6 +1,7 @@
 using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Imp;
 using ShradhaGeneralBookStores.Service.Interface;
+using ShradhaGeneralBookStores.Service.ServiceClassImpl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,10 @@ builder.Services.AddScoped<IServiceCRUD<Review>, ReviewCRUD>();
 builder.Services.AddScoped<IServiceCRUD<Role>, RoleCRUD>();
 builder.Services.AddScoped<IServiceCRUD<Voucher>, VoucherCRUD>();
 builder.Services.AddScoped<IServiceCRUD<VoucherAccount>, VoucherAccountServiceCRUD>();
+
+//service binhf thuongwf
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddScoped<DatabaseContext>();
 

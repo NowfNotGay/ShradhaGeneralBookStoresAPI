@@ -21,6 +21,8 @@ public partial class Account
 
     public bool? Status { get; set; }
 
+    public string? SecurityCode { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }

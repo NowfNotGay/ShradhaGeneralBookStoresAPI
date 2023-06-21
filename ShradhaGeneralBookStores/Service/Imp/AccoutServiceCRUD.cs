@@ -53,6 +53,7 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
         a.Phone,
         a.Avatar,
         a.Status,
+        a.SecurityCode,
         a.CreatedAt,
         a.UpdatedAt
     }).FirstOrDefault()!;
@@ -67,6 +68,7 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
         a.Phone,
         a.Avatar,
         a.Status,
+        a.SecurityCode,
         a.CreatedAt,
         a.UpdatedAt
     });
