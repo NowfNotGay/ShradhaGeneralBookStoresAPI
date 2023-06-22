@@ -19,7 +19,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.Categories.Add(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -37,7 +37,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -58,8 +58,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
             c.Name,
             c.ParentId,
             c.CreatedAt, 
-            c.UpdatedAt,
-            c.InverseParent
+            c.UpdatedAt
         });
 
         public bool Update(Category entity)
@@ -69,7 +68,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.Categories.Update(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

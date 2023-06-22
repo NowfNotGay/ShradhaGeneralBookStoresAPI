@@ -12,30 +12,29 @@ public class AccountController : ControllerBase
 {
     private readonly IServiceCRUD<Account> _serviceCRUD;
     private readonly IAccountService _accountService;
+    private readonly IAccountRoleService _accountRoleService;
     private readonly IConfiguration _configuration;
 
-    public AccountController(IServiceCRUD<Account> serviceCRUD, IAccountService accountService, IConfiguration configuration)
+    public AccountController(IServiceCRUD<Account> serviceCRUD, IAccountService accountService, IAccountRoleService accountRoleService, IConfiguration configuration)
     {
         _serviceCRUD = serviceCRUD;
         _accountService = accountService;
+        _accountRoleService = accountRoleService;
         _configuration = configuration;
     }
 
-
     //Register start
     [Produces("application/json")]
-    [HttpPost("Create")]
+    [HttpPost("Register")]
     public IActionResult Register([FromBody]Account account)
     {
         try
         {   //Date cập nhật và date tạo
             account.CreatedAt = DateTime.Now;
             account.UpdatedAt = DateTime.Now;
-
             account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
             account.Status = false;
             account.SecurityCode = RandomHelper.RandomString(6);
-
             Debug.WriteLine(account);
             var mailhelper = new MailHelper(_configuration);
             string contentmail = "<a href=\"https://localhost:7270/api/Account/Active?email="+account.Email+"&securitycode="+account.SecurityCode+"\">Nhấn để kích hoạt</a>";
@@ -111,7 +110,7 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var account = _accountService.GetAccountOfEmailForgetPassword(email);
+            var account = _accountService.GetAccountForForgetPassword(email,securityCode);
             if (account == null)
             {
                 return Ok(false);

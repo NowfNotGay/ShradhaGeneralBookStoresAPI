@@ -2,5 +2,5 @@
 
 public interface ICategoryService
 {
-    public dynamic GetSubParent(int categoryId);
+    public dynamic GetAllCategoryByLevel();
 }

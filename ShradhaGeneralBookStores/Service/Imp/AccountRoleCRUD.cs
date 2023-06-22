@@ -19,7 +19,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.AccountRoles.Add(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -37,7 +37,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -66,7 +66,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.AccountRoles.Update(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

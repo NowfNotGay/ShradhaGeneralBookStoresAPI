@@ -19,7 +19,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.Reviews.Add(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -37,13 +37,13 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public dynamic Get(int id) => _databaseContext.Reviews.Find(id);
+        public dynamic Get(int id) => _databaseContext.Reviews.Find(id)!;
 
         public dynamic Read() => _databaseContext.Reviews;
 
@@ -54,7 +54,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
                 _databaseContext.Reviews.Update(entity);
                 return _databaseContext.SaveChanges() > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

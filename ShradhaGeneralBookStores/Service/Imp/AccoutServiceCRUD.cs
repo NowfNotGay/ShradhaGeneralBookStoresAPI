@@ -19,7 +19,7 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
             _databaseContext.Accounts.Add(entity);
             return _databaseContext.SaveChanges() > 0;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -37,7 +37,7 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
             }
             return false;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -80,7 +80,7 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
             _databaseContext.Accounts.Update(entity);
             return _databaseContext.SaveChanges() > 0;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }

@@ -38,6 +38,7 @@ builder.Services.AddScoped<IServiceCRUD<VoucherAccount>, VoucherAccountServiceCR
 //service binhf thuongwf
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRoleService, AccountRoleService>();
 
 builder.Services.AddScoped<DatabaseContext>();
 

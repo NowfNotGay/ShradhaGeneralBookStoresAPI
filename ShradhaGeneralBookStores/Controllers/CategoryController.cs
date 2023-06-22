@@ -40,7 +40,23 @@ public class CategoryController : ControllerBase
     {
         try
         {
+            category.CreatedAt = DateTime.Now;
+            category.UpdatedAt = DateTime.Now;
             return Ok(_serviceCRUD.Create(category));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpDelete("Delete")]
+    public IActionResult Delete(int id)
+    {
+        try
+        {
+            return Ok(_serviceCRUD.Delete(id));
         }
         catch
         {
@@ -50,12 +66,27 @@ public class CategoryController : ControllerBase
 
     [Consumes("application/json")]
     [Produces("application/json")]
-    [HttpGet("GetListParent")]
-    public IActionResult GetListParent(int categoryId)
+    [HttpPut("Update")]
+    public IActionResult Update([FromBody] Category category)
     {
         try
         {
-            return Ok(_categoryService.GetSubParent(categoryId));
+            category.UpdatedAt= DateTime.Now;
+            return Ok(_serviceCRUD.Update(category));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("GetListParent")]
+    public IActionResult GetListParent()
+    {
+        try
+        {
+            return Ok(_categoryService.GetAllCategoryByLevel());
         }
         catch
         {
