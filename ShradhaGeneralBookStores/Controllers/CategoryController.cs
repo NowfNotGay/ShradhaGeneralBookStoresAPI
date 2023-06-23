@@ -36,14 +36,14 @@ public class CategoryController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
-    public IActionResult Create([FromBody] CategoryAPI categoryapi)
+    public IActionResult Create([FromBody] Category category)
     {
         try
         {
-            var category = new Category();
-            category.Name = categoryapi.Name;
-
-            category.ParentId = categoryapi.ParentId == 0 ? null : categoryapi.ParentId;
+            //var category = new Category();
+            //category.Name = categoryapi.Name;
+            //category.ParentId = categoryapi.ParentId == 0 ? null : categoryapi.ParentId;
+            category.ParentId = category.ParentId == 0 ? null : category.ParentId;
             category.CreatedAt = DateTime.Now;
             category.UpdatedAt = DateTime.Now;
             return Ok(_serviceCRUD.Create(category));

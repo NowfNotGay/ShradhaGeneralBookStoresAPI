@@ -1,3 +1,5 @@
+using BaiThiWEBAPI.Converters;
+using ShradhaGeneralBookStores.Converters;
 using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Imp;
 using ShradhaGeneralBookStores.Service.Interface;
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors();
+builder.Services.AddControllers().AddJsonOptions(option =>
+{
+    option.JsonSerializerOptions.Converters.Add(new DateTimeCoverter());
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
