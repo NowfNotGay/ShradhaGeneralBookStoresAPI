@@ -6,14 +6,15 @@ using ShradhaGeneralBookStores.Service.Interface;
 namespace ShradhaGeneralBookStores.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class RoleController : ControllerBase
+public class PublisherController : ControllerBase
 {
-    private readonly IServiceCRUD<Role> _serviceCRUD;
+    private readonly IServiceCRUD<Publisher> _serviceCRUD;
 
-    public RoleController(IServiceCRUD<Role> serviceCRUD)
+    public PublisherController(IServiceCRUD<Publisher> serviceCRUD)
     {
         _serviceCRUD = serviceCRUD;
     }
+
     [Produces("application/json")]
     [HttpGet("Read")]
     public IActionResult Read()
@@ -27,17 +28,17 @@ public class RoleController : ControllerBase
             return BadRequest();
         }
     }
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
-    public IActionResult Create([FromBody] Role role)
-
+    public IActionResult Create([FromBody] Publisher publisher)
     {
         try
         {
-            role.CreatedAt = DateTime.Now;
-            role.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Create(role));
+            publisher.CreatedAt = DateTime.Now;
+            publisher.UpdatedAt = DateTime.Now;
+            return Ok(_serviceCRUD.Create(publisher));
         }
         catch
         {
@@ -62,12 +63,12 @@ public class RoleController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPut("Update")]
-    public IActionResult Update([FromBody] Role roley)
+    public IActionResult Update([FromBody] Publisher publisher)
     {
         try
         {
-            roley.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Update(roley));
+            publisher.UpdatedAt = DateTime.Now;
+            return Ok(_serviceCRUD.Update(publisher));
         }
         catch
         {

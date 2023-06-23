@@ -26,7 +26,7 @@ public class AccountController : ControllerBase
     //Register start
     [Produces("application/json")]
     [HttpPost("Register")]
-    public IActionResult Register([FromBody]Account account)
+    public IActionResult Register([FromBody] Account account)
     {
         try
         {   //Date cập nhật và date tạo
@@ -37,8 +37,8 @@ public class AccountController : ControllerBase
             account.SecurityCode = RandomHelper.RandomString(6);
             Debug.WriteLine(account);
             var mailhelper = new MailHelper(_configuration);
-            string contentmail = "<a href=\"https://localhost:7270/api/Account/Active?email="+account.Email+"&securitycode="+account.SecurityCode+"\">Nhấn để kích hoạt</a>";
-            mailhelper.Send(_configuration["Gmail:Username"]!,account.Email,"Verify Mail",contentmail);
+            string contentmail = "<a href=\"https://localhost:7270/api/Account/Active?email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
+            mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
             return Ok(_serviceCRUD.Create(account));
         }
         catch
@@ -87,14 +87,14 @@ public class AccountController : ControllerBase
         try
         {
             var account = _accountService.GetAccountOfEmailForgetPassword(email);
-            if(account == null) 
+            if (account == null)
             {
                 return Ok(false);
             }
             account.SecurityCode = RandomHelper.RandomString(6);
             var mailhelper = new MailHelper(_configuration);
             string contentmail = "<a href=\"https://localhost:7270/api/Account/CheckCodeForget?email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
-            mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);  
+            mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
             account.UpdatedAt = DateTime.Now;
             return Ok(_serviceCRUD.Update(account));
         }
@@ -106,11 +106,11 @@ public class AccountController : ControllerBase
 
     [Produces("application/json")]
     [HttpPut("CheckCodeForget")]
-    public IActionResult CheckCodeForget(string email,string securityCode)
+    public IActionResult CheckCodeForget(string email, string securityCode)
     {
         try
         {
-            var account = _accountService.GetAccountForForgetPassword(email,securityCode);
+            var account = _accountService.GetAccountForForgetPassword(email, securityCode);
             if (account == null)
             {
                 return Ok(false);

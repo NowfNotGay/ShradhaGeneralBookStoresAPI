@@ -6,11 +6,11 @@ using ShradhaGeneralBookStores.Service.Interface;
 namespace ShradhaGeneralBookStores.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class RoleController : ControllerBase
+public class EventController : ControllerBase
 {
-    private readonly IServiceCRUD<Role> _serviceCRUD;
+    private readonly IServiceCRUD<Event> _serviceCRUD;
 
-    public RoleController(IServiceCRUD<Role> serviceCRUD)
+    public EventController(IServiceCRUD<Event> serviceCRUD)
     {
         _serviceCRUD = serviceCRUD;
     }
@@ -30,14 +30,13 @@ public class RoleController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
-    public IActionResult Create([FromBody] Role role)
-
+    public IActionResult Create([FromBody] Event eventi)
     {
         try
         {
-            role.CreatedAt = DateTime.Now;
-            role.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Create(role));
+            eventi.CreatedAt = DateTime.Now;
+            eventi.UpdatedAt = DateTime.Now;
+            return Ok(_serviceCRUD.Create(eventi));
         }
         catch
         {
@@ -62,12 +61,12 @@ public class RoleController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPut("Update")]
-    public IActionResult Update([FromBody] Role roley)
+    public IActionResult Update([FromBody] Event eventi)
     {
         try
         {
-            roley.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Update(roley));
+            eventi.UpdatedAt = DateTime.Now;
+            return Ok(_serviceCRUD.Update(eventi));
         }
         catch
         {

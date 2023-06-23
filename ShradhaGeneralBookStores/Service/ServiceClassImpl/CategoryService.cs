@@ -24,8 +24,7 @@ public class CategoryService : ICategoryService
     private List<Category> dequy(List<Category> categories, int? parent = null, string level = "")
     {
         foreach (var category in categories)
-        {
-            
+        {   
             if (category.ParentId == parent)
             {
                 category.Name = level + category.Name;
