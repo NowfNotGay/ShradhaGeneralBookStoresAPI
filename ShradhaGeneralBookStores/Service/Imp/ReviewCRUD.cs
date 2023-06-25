@@ -43,9 +43,27 @@ namespace ShradhaGeneralBookStores.Service.Imp
             }
         }
 
-        public dynamic Get(int id) => _databaseContext.Reviews.Find(id)!;
+        public dynamic Get(int id) => _databaseContext.Reviews.Where(r => r.Id == id).Select(r => new
+        {
+            r.Id,
+            r.AccountId,
+            r.ProductId,
+            r.Content,
+            r.Rating,
+            r.CreatedAt,
+            r.UpdatedAt
+        });
 
-        public dynamic Read() => _databaseContext.Reviews;
+        public dynamic Read() => _databaseContext.Reviews.Select(r => new
+        {
+            r.Id,
+            r.AccountId,
+            r.ProductId,
+            r.Content,
+            r.Rating,
+            r.CreatedAt,
+            r.UpdatedAt
+        });
 
         public bool Update(Review entity)
         {

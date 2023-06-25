@@ -43,9 +43,21 @@ namespace ShradhaGeneralBookStores.Service.Imp
             }
         }
 
-        public dynamic Get(int id) => _databaseContext.PaymentMethods.FirstOrDefault(pm => pm.Id == id)!;
+        public dynamic Get(int id) => _databaseContext.PaymentMethods.Where(pm => pm.Id == id).Select(pm => new
+        {
+            pm.Id,
+            pm.Name,
+            pm.CreatedAt,
+            pm.UpdatedAt
+        });
 
-        public dynamic Read() => _databaseContext.PaymentMethods;
+        public dynamic Read() => _databaseContext.PaymentMethods.Select(pm => new
+        {
+            pm.Id,
+            pm.Name,
+            pm.CreatedAt,
+            pm.UpdatedAt
+        });
 
         public bool Update(PaymentMethod entity)
         {
