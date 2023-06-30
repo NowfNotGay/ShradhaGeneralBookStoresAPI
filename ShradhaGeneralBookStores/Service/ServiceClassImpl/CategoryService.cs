@@ -18,7 +18,9 @@ public class CategoryService : ICategoryService
     {
         c.Id,
         c.Name,
-        c.ParentId
+        c.ParentId,
+        c.CreatedAt, 
+        c.UpdatedAt
     });
 
     private List<Category> dequy(List<Category> categories, int? parent = null, string level = "")
