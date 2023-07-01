@@ -35,6 +35,21 @@ public class CategoryController : ControllerBase
 
     [Consumes("application/json")]
     [Produces("application/json")]
+    [HttpGet("Get")]
+    public IActionResult Read(int id)
+    {
+        try
+        {
+            return Ok(_serviceCRUD.Get(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPost("Create")]
     public IActionResult Create([FromBody] Category category)
     {
@@ -76,6 +91,7 @@ public class CategoryController : ControllerBase
         try
         {
             category.UpdatedAt= DateTime.Now;
+            category.ParentId = category.ParentId == 0 ? null : category.ParentId;
             return Ok(_serviceCRUD.Update(category));
         }
         catch
@@ -91,6 +107,20 @@ public class CategoryController : ControllerBase
         try
         {
             return Ok(_categoryService.GetAllCategoryByLevel());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("GetAllCategoryByLevelOnlyId")]
+    public IActionResult GetAllCategoryByLevelOnlyId(int id)
+    {
+        try
+        {
+            return Ok(_categoryService.GetAllCategoryByLevelOnlyId(id));
         }
         catch
         {
