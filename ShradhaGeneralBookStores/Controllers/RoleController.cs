@@ -27,6 +27,21 @@ public class RoleController : ControllerBase
             return BadRequest();
         }
     }
+
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpGet("Get")]
+    public IActionResult Read(int id)
+    {
+        try
+        {
+            return Ok(_serviceCRUD.Get(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
