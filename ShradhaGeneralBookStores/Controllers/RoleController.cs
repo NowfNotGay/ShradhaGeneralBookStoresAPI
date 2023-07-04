@@ -31,7 +31,7 @@ public class RoleController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpGet("Get")]
-    public IActionResult Read(int id)
+    public IActionResult Get(int id)
     {
         try
         {

@@ -14,14 +14,18 @@ public class AccountController : ControllerBase
     private readonly IAccountService _accountService;
     private readonly IAccountRoleService _accountRoleService;
     private readonly IConfiguration _configuration;
+    private readonly IAccountAdmin _accountAdmin;
 
-    public AccountController(IServiceCRUD<Account> serviceCRUD, IAccountService accountService, IAccountRoleService accountRoleService, IConfiguration configuration)
+    public AccountController(IServiceCRUD<Account> serviceCRUD, IAccountService accountService, IAccountRoleService accountRoleService, IConfiguration configuration, IAccountAdmin accountAdmin)
     {
         _serviceCRUD = serviceCRUD;
         _accountService = accountService;
         _accountRoleService = accountRoleService;
         _configuration = configuration;
+        _accountAdmin = accountAdmin;
     }
+
+
 
     //Register start
     [Produces("application/json")]
@@ -144,7 +148,7 @@ public class AccountController : ControllerBase
 
     //list account start
     [Produces("application/json")]
-    [HttpPost("Read")]
+    [HttpGet("Read")]
     public IActionResult Read()
     {
         try
@@ -172,4 +176,55 @@ public class AccountController : ControllerBase
     }
     //list account end
 
+
+    //add account admin
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPost("Create")]
+    public IActionResult Create([FromBody] AccountAPI account)
+    {
+        try
+        {   //Date cập nhật và date tạo
+            account.CreatedAt = DateTime.Now;
+            account.UpdatedAt = DateTime.Now;
+            account.Status = true;
+            account.SecurityCode = RandomHelper.RandomString(6);
+            account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
+            return Ok(_accountAdmin.AddAccount(account));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    //list account start
+    [Produces("application/json")]
+    [HttpGet("CheckExist")]
+    public IActionResult CheckExist(string email)
+    {
+        try
+        {
+            return Ok(_accountService.CheckExistsForEmail(email));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    //list account start
+    [Produces("application/json")]
+    [HttpGet("GetRoleByAccountId")]
+    public IActionResult GetRoleByAccountId(int id)
+    {
+        try
+        {
+            return Ok(_accountAdmin.GetRoleByAccountId(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using ShradhaGeneralBookStores.Models;
+﻿using Microsoft.Identity.Client;
+using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Interface;
 
 namespace ShradhaGeneralBookStores.Service.Imp;
@@ -6,7 +7,6 @@ namespace ShradhaGeneralBookStores.Service.Imp;
 public class AccoutServiceCRUD: IServiceCRUD<Account>
 {
     private readonly DatabaseContext _databaseContext;
-
     public AccoutServiceCRUD(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
@@ -54,24 +54,29 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
         a.Avatar,
         a.Status,
         a.SecurityCode,
+
         a.CreatedAt,
         a.UpdatedAt
     }).FirstOrDefault()!;
 
-    public dynamic Read() => _databaseContext.Accounts.Select(a => new
+    public dynamic Read()
     {
-        a.Id,
-        a.Email,
-        a.Password,
-        a.FirstName,
-        a.LastName,
-        a.Phone,
-        a.Avatar,
-        a.Status,
-        a.SecurityCode,
-        a.CreatedAt,
-        a.UpdatedAt
-    });
+        
+        return _databaseContext.Accounts.Select(a => new
+        {
+            a.Id,
+            a.Email,
+            a.Password,
+            a.FirstName,
+            a.LastName,
+            a.Phone,
+            a.Avatar,
+            a.Status,
+            a.SecurityCode,
+            a.CreatedAt,
+            a.UpdatedAt
+        });
+    }
 
     public bool Update(Account entity)
     {
@@ -84,5 +89,16 @@ public class AccoutServiceCRUD: IServiceCRUD<Account>
         {
             return false;
         }
+    }
+
+
+    private List<string> list(int id) 
+    {
+        var a = new List<string>();
+        foreach (var role in _databaseContext.Accounts.FirstOrDefault(b => b.Id == id)!.AccountRoles)
+        {
+            a.Add(_databaseContext.Roles.Find(role.RoleId)!.Name);
+        }
+        return a;
     }
 }
