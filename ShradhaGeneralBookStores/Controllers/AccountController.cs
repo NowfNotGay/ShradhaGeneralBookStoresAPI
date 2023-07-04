@@ -188,6 +188,8 @@ public class AccountController : ControllerBase
             account.CreatedAt = DateTime.Now;
             account.UpdatedAt = DateTime.Now;
             account.Status = true;
+            account.Status = true;
+
             account.SecurityCode = RandomHelper.RandomString(6);
             account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
             return Ok(_accountAdmin.AddAccount(account));
