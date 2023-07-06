@@ -65,11 +65,11 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0721E210D4");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC07EC7E33B5");
 
             entity.ToTable("Account");
 
-            entity.HasIndex(e => e.Email, "UQ__Account__A9D1053497757083").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Account__A9D1053425F52CB1").IsUnique();
 
             entity.Property(e => e.Avatar)
                 .HasMaxLength(100)
@@ -88,6 +88,9 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.SecurityCode)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Status).HasDefaultValueSql("((1))");
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -96,7 +99,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<AccountRole>(entity =>
         {
-            entity.HasKey(e => new { e.AccountId, e.RoleId }).HasName("PK__AccountR__8C320947AE63ED8C");
+            entity.HasKey(e => new { e.AccountId, e.RoleId }).HasName("PK__AccountR__8C320947A371EB87");
 
             entity.ToTable("AccountRole");
 
@@ -120,7 +123,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<AddressProfile>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AddressP__3214EC072BAC37B6");
+            entity.HasKey(e => e.Id).HasName("PK__AddressP__3214EC07A3FEDA46");
 
             entity.ToTable("AddressProfile");
 
@@ -142,7 +145,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Author>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Author__3214EC072E714E73");
+            entity.HasKey(e => e.Id).HasName("PK__Author__3214EC0754D9E65C");
 
             entity.ToTable("Author");
 
@@ -161,7 +164,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Category__3214EC076A41AECD");
+            entity.HasKey(e => e.Id).HasName("PK__Category__3214EC07D02B9347");
 
             entity.ToTable("Category");
 
@@ -180,7 +183,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Event__3214EC075317C2EA");
+            entity.HasKey(e => e.Id).HasName("PK__Event__3214EC07A8573FFC");
 
             entity.ToTable("Event");
 
@@ -198,7 +201,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<EventDetail>(entity =>
         {
-            entity.HasKey(e => new { e.ProductId, e.EventId }).HasName("PK__EventDet__A3988A4CBD576992");
+            entity.HasKey(e => new { e.ProductId, e.EventId }).HasName("PK__EventDet__A3988A4C6EEE6859");
 
             entity.ToTable("EventDetail");
 
@@ -245,7 +248,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Orders__3214EC076ABD1F16");
+            entity.HasKey(e => e.Id).HasName("PK__Orders__3214EC076BFC08CD");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -283,7 +286,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A3FA80E7A3");
+            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A32B6A9631");
 
             entity.ToTable("OrderDetail");
 
@@ -307,7 +310,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderStatus>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OrderSta__3214EC07AF126605");
+            entity.HasKey(e => e.Id).HasName("PK__OrderSta__3214EC0780146522");
 
             entity.ToTable("OrderStatus");
 
@@ -324,7 +327,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentM__3214EC0763B5F33C");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentM__3214EC07CB0782AE");
 
             entity.ToTable("PaymentMethod");
 
@@ -341,7 +344,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Product__3214EC076EC88444");
+            entity.HasKey(e => e.Id).HasName("PK__Product__3214EC077326C1D6");
 
             entity.ToTable("Product");
 
@@ -364,9 +367,9 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<ProductAuthor>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ProductAuthor");
+            entity.HasKey(e => new { e.ProductId, e.AuthorId }).HasName("PK__ProductA__E301690E34A879EE");
+
+            entity.ToTable("ProductAuthor");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -375,22 +378,22 @@ public partial class DatabaseContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Author).WithMany()
+            entity.HasOne(d => d.Author).WithMany(p => p.ProductAuthors)
                 .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProductAu__Autho__0B91BA14");
+                .HasConstraintName("FK__ProductAu__Autho__3D2915A8");
 
-            entity.HasOne(d => d.Product).WithMany()
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductAuthors)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProductAu__Produ__0A9D95DB");
+                .HasConstraintName("FK__ProductAu__Produ__3C34F16F");
         });
 
         modelBuilder.Entity<ProductCategory>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ProductCategory");
+            entity.HasKey(e => new { e.ProductId, e.CategoryId }).HasName("PK__ProductC__159C556D86E1BE28");
+
+            entity.ToTable("ProductCategory");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -399,20 +402,20 @@ public partial class DatabaseContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Category).WithMany()
+            entity.HasOne(d => d.Category).WithMany(p => p.ProductCategories)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProductCa__Categ__06CD04F7");
+                .HasConstraintName("FK__ProductCa__Categ__37703C52");
 
-            entity.HasOne(d => d.Product).WithMany()
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductCategories)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProductCa__Produ__05D8E0BE");
+                .HasConstraintName("FK__ProductCa__Produ__367C1819");
         });
 
         modelBuilder.Entity<ProductImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ProductI__3214EC07787BE8C9");
+            entity.HasKey(e => e.Id).HasName("PK__ProductI__3214EC0708E971FE");
 
             entity.ToTable("ProductImage");
 
@@ -434,7 +437,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Publisher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Publishe__3214EC07BFCA7DDF");
+            entity.HasKey(e => e.Id).HasName("PK__Publishe__3214EC076C274C35");
 
             entity.ToTable("Publisher");
 
@@ -452,7 +455,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Review__3214EC070F746F57");
+            entity.HasKey(e => e.Id).HasName("PK__Review__3214EC07B6AD2FC1");
 
             entity.ToTable("Review");
 
@@ -477,7 +480,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC07B229EA2A");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC07F61FCA61");
 
             entity.ToTable("Role");
 
@@ -492,13 +495,13 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Voucher__3214EC0704F57389");
+            entity.HasKey(e => e.Id).HasName("PK__Voucher__3214EC072F96F7DA");
 
             entity.ToTable("Voucher");
 
-            entity.HasIndex(e => e.VarityCode, "UQ__Voucher__61D1EB444EBB11DA").IsUnique();
+            entity.HasIndex(e => e.VarityCode, "UQ__Voucher__61D1EB449A671100").IsUnique();
 
-            entity.HasIndex(e => e.Name, "UQ__Voucher__737584F6A459A9CB").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Voucher__737584F682E0B39B").IsUnique();
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -523,7 +526,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<VoucherAccount>(entity =>
         {
-            entity.HasKey(e => new { e.AccountId, e.VoucherId }).HasName("PK__VoucherA__37334234C61F433E");
+            entity.HasKey(e => new { e.AccountId, e.VoucherId }).HasName("PK__VoucherA__37334234C7FD0E1D");
 
             entity.ToTable("VoucherAccount");
 
@@ -550,3 +553,4 @@ public partial class DatabaseContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+

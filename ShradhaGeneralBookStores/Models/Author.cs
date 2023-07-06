@@ -16,4 +16,6 @@ public partial class Author
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public virtual ICollection<ProductAuthor> ProductAuthors { get; set; } = new List<ProductAuthor>();
 }

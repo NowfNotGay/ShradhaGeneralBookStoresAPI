@@ -6,15 +6,15 @@ using ShradhaGeneralBookStores.Service.Interface;
 namespace ShradhaGeneralBookStores.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ProductImageController : ControllerBase
+public class ProductController : ControllerBase
 {
-    private readonly IServiceCRUD<ProductImage> _serviceCRUD;
-    private readonly IProductImageService _productImageService;
+    private readonly IServiceCRUD<Product> _serviceCRUD;
+    private readonly IProductService _productService;
 
-    public ProductImageController(IServiceCRUD<ProductImage> serviceCRUD, IProductImageService productImageService)
+    public ProductController(IServiceCRUD<Product> serviceCRUD, IProductService productService)
     {
         _serviceCRUD = serviceCRUD;
-        _productImageService = productImageService;
+        _productService = productService;
     }
 
     [Produces("application/json")]
@@ -30,28 +30,15 @@ public class ProductImageController : ControllerBase
             return BadRequest();
         }
     }
-    [Produces("application/json")]
-    [HttpPost("Create/{productId}")]
-    public IActionResult Create( IFormFile[] photo, int productId)
 
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpGet("Get")]
+    public IActionResult Read(int id)
     {
         try
         {
-            return Ok(_productImageService.Add(productId,photo));
-        }
-        catch
-        {
-            return BadRequest();
-        }
-    }
-
-    [Produces("application/json")]
-    [HttpDelete("Delete")]
-    public IActionResult Delete(int id)
-    {
-        try
-        {
-            return Ok(_serviceCRUD.Delete(id));
+            return Ok(_serviceCRUD.Get(id));
         }
         catch
         {
@@ -61,13 +48,15 @@ public class ProductImageController : ControllerBase
 
     [Consumes("application/json")]
     [Produces("application/json")]
-    [HttpPut("Update")]
-    public IActionResult Update([FromBody] ProductImage productImage)
+    [HttpPost("Create")]
+    public IActionResult Create([FromBody] ProductAPI product)
     {
         try
         {
-            productImage.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Update(productImage));
+            product.CreatedAt = DateTime.Now;
+            product.UpdatedAt = DateTime.Now;
+
+            return Ok();
         }
         catch
         {
@@ -76,4 +65,20 @@ public class ProductImageController : ControllerBase
     }
 
 
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPost("Add")]
+    public IActionResult Add([FromBody] ProductAPI product)
+    {
+        try
+        {
+            product.CreatedAt = DateTime.Now;
+            product.UpdatedAt = DateTime.Now;
+            return Ok(_productService.AddProduct(product));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }

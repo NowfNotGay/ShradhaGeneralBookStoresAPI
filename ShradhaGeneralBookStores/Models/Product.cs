@@ -17,10 +17,11 @@ public partial class Product
 
     public int Cost { get; set; }
 
-    public bool Status { get; set; }
-    public bool Hot { get; set; }
-
     public int? PublisherId { get; set; }
+
+    public bool Status { get; set; }
+
+    public bool Hot { get; set; }
 
     public string? PublishingYear { get; set; }
 
@@ -31,6 +32,10 @@ public partial class Product
     public virtual ICollection<EventDetail> EventDetails { get; set; } = new List<EventDetail>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+    public virtual ICollection<ProductAuthor> ProductAuthors { get; set; } = new List<ProductAuthor>();
+
+    public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
