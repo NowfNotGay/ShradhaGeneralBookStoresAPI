@@ -10,4 +10,6 @@ public interface IAccountService
     public Account GetAccountForForgetPassword(string email,string securityCode);
     public bool ActiveAccount(string email,string security);
     public bool DisableAccount(int id);
+    public dynamic Read();
+    public dynamic Get(int id);
 }

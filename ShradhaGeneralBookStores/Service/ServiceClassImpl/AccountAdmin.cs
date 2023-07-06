@@ -88,7 +88,7 @@ public class AccountAdmin : IAccountAdmin
                 accountadd.Phone = account.Phone;
                 accountadd.Email = account.Email;
                 accountadd.Password = account.Password;
-                accountadd.Status = false;
+                accountadd.Status = true;
                 accountadd.Avatar = account.Avatar;
                 accountadd.CreatedAt = account.CreatedAt;
                 accountadd.UpdatedAt = account.UpdatedAt;
@@ -105,6 +105,8 @@ public class AccountAdmin : IAccountAdmin
                 //{
 
                 //}
+
+
 
                 //remove all role of account
                 foreach(var roleid in _databaseContext.AccountRoles.Where(a=>a.AccountId == account.Id))

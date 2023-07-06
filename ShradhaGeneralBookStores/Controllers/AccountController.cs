@@ -153,7 +153,21 @@ public class AccountController : ControllerBase
     {
         try
         {
-            return Ok(_serviceCRUD.Read());
+            return Ok(_accountService.Read());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("Get")]
+    public IActionResult Get(int id)
+    {
+        try
+        {
+            return Ok(_accountService.Get(id));
         }
         catch
         {
@@ -198,6 +212,30 @@ public class AccountController : ControllerBase
         }
     }
 
+    //edit account admin
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPut("Update")]
+    public IActionResult Update([FromBody] AccountAPI account)
+    {
+        try
+        {
+            var a = _serviceCRUD.Get(account.Id);
+            //Date cập nhật và date tạo
+            account.CreatedAt = a.CreatedAt;
+            account.UpdatedAt = DateTime.Now;
+            account.Status = true;
+            account.SecurityCode = a.SecurityCode;
+            account.Password = (account.Password != null)? BCrypt.Net.BCrypt.HashPassword(account.Password): a.Password;
+            return Ok(_accountAdmin.UpdateRoleAccount(account));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+
     //list account start
     [Produces("application/json")]
     [HttpGet("CheckExist")]
@@ -212,6 +250,7 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
     }
+
 
     //list account start
     [Produces("application/json")]

@@ -1,4 +1,5 @@
-﻿using ShradhaGeneralBookStores.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Interface;
 
 namespace ShradhaGeneralBookStores.Service.ServiceClassImpl;
@@ -86,5 +87,48 @@ public class AccountService : IAccountService
         {
             return false;
         }
+    }
+    public dynamic Read()
+    {
+        return _databaseContext.Accounts
+            .Include(a => a.AccountRoles)
+            .ThenInclude(ar => ar.Role)
+            .Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Password,
+                a.FirstName,
+                a.LastName,
+                a.Phone,
+                a.Avatar,
+                a.Status,
+                a.SecurityCode,
+                a.CreatedAt,
+                a.UpdatedAt,
+                Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
+            });
+    }
+    public dynamic Get(int id)
+    {
+        return _databaseContext.Accounts
+            .Include(a => a.AccountRoles)
+            .ThenInclude(ar => ar.Role)
+            .Where(a => a.Id == id)
+            .Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Password,
+                a.FirstName,
+                a.LastName,
+                a.Phone,
+                a.Avatar,
+                a.Status,
+                a.SecurityCode,
+                a.CreatedAt,
+                a.UpdatedAt,
+                RoleId = a.AccountRoles.Select(ar => ar.Role.Id).ToList()
+            });
     }
 }
