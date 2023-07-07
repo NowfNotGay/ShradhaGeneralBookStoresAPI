@@ -63,7 +63,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
 app.UseAuthorization();
 app.UseCors(builder => builder
                 .AllowAnyHeader()
@@ -71,8 +70,7 @@ app.UseCors(builder => builder
                 .SetIsOriginAllowed((host) => true)
                 .AllowCredentials()
             );
-app.MapControllers();
+app.UseStaticFiles();
 
 app.MapControllers();
-
 app.Run();
