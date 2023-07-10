@@ -75,14 +75,13 @@ public class ProductController : ControllerBase
         }
     }
 
-    [Consumes("application/json")]
     [Produces("application/json")]
     [HttpGet("Get")]
-    public IActionResult Read(int id)
+    public IActionResult Get(int id)
     {
         try
         {
-            return Ok(_serviceCRUD.Get(id));
+            return Ok(_productService.GetById(id));
         }
         catch
         {

@@ -7,10 +7,12 @@ namespace ShradhaGeneralBookStores.Service.ServiceClassImpl;
 public class AccountService : IAccountService
 {
     private readonly DatabaseContext _databaseContext;
+    private readonly IConfiguration _configuration;
 
-    public AccountService(DatabaseContext databaseContext)
+    public AccountService(DatabaseContext databaseContext, IConfiguration configuration)
     {
         _databaseContext = databaseContext;
+        _configuration = configuration;
     }
 
     public bool ActiveAccount(string email, string security)
@@ -126,6 +128,29 @@ public class AccountService : IAccountService
                 a.CreatedAt,
                 a.UpdatedAt,
                 RoleId = a.AccountRoles.Select(ar => ar.Role.Id).ToList()
+            });
+    }
+
+    public dynamic GetByEmail(string email)
+    {
+        return _databaseContext.Accounts
+            .Include(a => a.AccountRoles)
+            .ThenInclude(ar => ar.Role)
+            .Where(a => a.Email == email)
+            .Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Password,
+                a.FirstName,
+                a.LastName,
+                a.Phone,
+                Avatar = _configuration["BaseURL"] + "Images/Avatars/" + a.Avatar,
+                a.Status,
+                a.SecurityCode,
+                a.CreatedAt,
+                a.UpdatedAt,
+                Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
             });
     }
 }

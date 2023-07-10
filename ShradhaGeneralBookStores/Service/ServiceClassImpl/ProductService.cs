@@ -85,7 +85,31 @@ public class ProductService : IProductService
         }
     }
 
-
+    public dynamic GetById(int id) => _databaseContext.Products
+    .Include(p => p.ProductAuthors)
+    .ThenInclude(pa => pa.Author)
+    .Include(p => p.ProductCategories)
+    .ThenInclude(pc => pc.Category)
+    .Include(p => p.ProductImages)
+    .Where(p=>p.Id == id)
+    .Select(p => new
+    {
+        p.Id,
+        p.Name,
+        p.Description,
+        p.Quantity,
+        p.Price,
+        p.Cost,
+        p.PublisherId,
+        p.Status,
+        p.Hot,
+        p.PublishingYear,
+        p.CreatedAt,
+        p.UpdatedAt,
+        AuthorsId = p.ProductAuthors.Select(pa => pa.Author.Id),
+        CategoriesId = p.ProductCategories.Select(pc => pc.Category.Id),
+        Photos = p.ProductImages.Where(pi=>pi.ProductId == id).Select(pi=> _configuration["BaseURL"] + "Images/ProductImages/"+ pi.ImagePath)
+    });
 
     public dynamic Read() => _databaseContext.Products
     .Include(p => p.ProductAuthors)

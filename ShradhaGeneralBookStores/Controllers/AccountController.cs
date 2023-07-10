@@ -176,6 +176,20 @@ public class AccountController : ControllerBase
     }
 
     [Produces("application/json")]
+    [HttpGet("GetByEmail")]
+    public IActionResult GetByEmail(string email)
+    {
+        try
+        {
+            return Ok(_accountService.GetByEmail(email));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
     [HttpPut("Delete")]
     public IActionResult Delete(int id)
     {
