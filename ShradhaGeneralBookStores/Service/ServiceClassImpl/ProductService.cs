@@ -1,4 +1,5 @@
-﻿using ShradhaGeneralBookStores.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Interface;
 
 namespace ShradhaGeneralBookStores.Service.ServiceClassImpl;
@@ -6,10 +7,12 @@ namespace ShradhaGeneralBookStores.Service.ServiceClassImpl;
 public class ProductService : IProductService
 {
     private readonly DatabaseContext _databaseContext;
+    private readonly IConfiguration _configuration;
 
-    public ProductService(DatabaseContext databaseContext)
+    public ProductService(DatabaseContext databaseContext, IConfiguration configuration)
     {
         _databaseContext = databaseContext;
+        _configuration = configuration;
     }
 
     public int AddProduct(ProductAPI product)
@@ -81,4 +84,31 @@ public class ProductService : IProductService
             return -1;
         }
     }
+
+
+
+    public dynamic Read() => _databaseContext.Products
+    .Include(p => p.ProductAuthors)
+    .ThenInclude(pa => pa.Author)
+    .Include(p => p.ProductCategories)
+    .ThenInclude(pc => pc.Category)
+    .Include(p => p.ProductImages)
+    .Select(p => new
+    {
+        p.Id,
+        p.Name,
+        p.Description,
+        p.Quantity,
+        p.Price,
+        p.Cost,
+        p.PublisherId,
+        p.Status,
+        p.Hot,
+        p.PublishingYear,
+        p.CreatedAt,
+        p.UpdatedAt,
+        Authors = p.ProductAuthors.Select(pa=>pa.Author.Name),
+        Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+        Photo = _configuration["BaseURL"] + "Images/ProductImages/"+ p.ProductImages.First().ImagePath,
+    });
 }

@@ -88,9 +88,7 @@ public class AccountService : IAccountService
             return false;
         }
     }
-    public dynamic Read()
-    {
-        return _databaseContext.Accounts
+    public dynamic Read() => _databaseContext.Accounts
             .Include(a => a.AccountRoles)
             .ThenInclude(ar => ar.Role)
             .Select(a => new
@@ -108,7 +106,6 @@ public class AccountService : IAccountService
                 a.UpdatedAt,
                 Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
             });
-    }
     public dynamic Get(int id)
     {
         return _databaseContext.Accounts

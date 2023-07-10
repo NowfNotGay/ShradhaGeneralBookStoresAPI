@@ -39,8 +39,9 @@ public class ProductImageService : IProductImageService
                         UpdatedAt= DateTime.Now,
                     };
                     _databaseContext.ProductImages.Add(image);
+                    
                 }
-
+                _databaseContext.SaveChanges();
                 transaction.Commit();
                 return true;
 
@@ -52,7 +53,7 @@ public class ProductImageService : IProductImageService
         {
             using (var transaction = _databaseContext.Database.BeginTransaction())
             {
-                transaction.Commit();
+                transaction.Rollback();
                 return false;
 
             }

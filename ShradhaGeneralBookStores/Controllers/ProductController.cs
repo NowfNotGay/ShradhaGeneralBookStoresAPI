@@ -23,7 +23,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            return Ok(_serviceCRUD.Read());
+            return Ok(_productService.Read());
         }
         catch
         {
