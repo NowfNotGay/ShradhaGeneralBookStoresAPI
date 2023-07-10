@@ -32,6 +32,7 @@ public class ProductService : IProductService
                     Status = product.Status,
                     Hot = product.Hot,
                     PublisherId = product.PublisherId,
+                    PublishingYear = product.PublishingYear,
                     CreatedAt = product.CreatedAt,
                     UpdatedAt = product.UpdatedAt
                 };
