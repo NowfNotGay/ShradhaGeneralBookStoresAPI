@@ -31,6 +31,35 @@ public class ProductController : ControllerBase
         }
     }
 
+    [Produces("application/json")]
+    [HttpGet("ReadForAuthor")]
+    public IActionResult ReadForAuthor(int idAuthor)
+    {
+        try
+        {
+            return Ok(_productService.ReadForAuthor(idAuthor));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("ReadForCategory")]
+    public IActionResult ReadForCategory(int idCategory)
+    {
+        try
+        {
+            return Ok(_productService.ReadForCategory(idCategory));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpGet("Get")]

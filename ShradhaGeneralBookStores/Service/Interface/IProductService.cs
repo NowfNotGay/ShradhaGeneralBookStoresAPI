@@ -6,4 +6,7 @@ public interface IProductService
 {
     public int AddProduct(ProductAPI product);
     public dynamic Read();
+
+    public dynamic ReadForAuthor(int idAuthor);
+    public dynamic ReadForCategory(int categoryId);
 }

@@ -226,7 +226,7 @@ public class AccountController : ControllerBase
             account.UpdatedAt = DateTime.Now;
             account.Status = true;
             account.SecurityCode = a.SecurityCode;
-            account.Password = (account.Password != null)? BCrypt.Net.BCrypt.HashPassword(account.Password): a.Password;
+            account.Password = (account.Password != "")? BCrypt.Net.BCrypt.HashPassword(account.Password): a.Password;
             return Ok(_accountAdmin.UpdateRoleAccount(account));
         }
         catch
