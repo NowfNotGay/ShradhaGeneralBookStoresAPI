@@ -9,4 +9,5 @@ public interface IProductService
 
     public dynamic ReadForAuthor(int idAuthor);
     public dynamic ReadForCategory(int categoryId);
+    public dynamic ReadForPublisher(int publisherId);
 }

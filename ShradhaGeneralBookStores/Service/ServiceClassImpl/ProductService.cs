@@ -112,9 +112,7 @@ public class ProductService : IProductService
         Photo = _configuration["BaseURL"] + "Images/ProductImages/"+ p.ProductImages.First().ImagePath,
     });
 
-    public dynamic ReadForAuthor(int idAuthor)
-    {
-        return _databaseContext.Products
+    public dynamic ReadForAuthor(int idAuthor) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)
             .Include(p => p.ProductCategories)
@@ -139,10 +137,7 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
-    }
-    public dynamic ReadForCategory(int categoryId)
-    {
-        return _databaseContext.Products
+    public dynamic ReadForCategory(int categoryId) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)
             .Include(p => p.ProductCategories)
@@ -167,7 +162,30 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
-    }
 
-
+    public dynamic ReadForPublisher(int publisherId) => _databaseContext.Products
+            .Include(p => p.ProductAuthors)
+            .ThenInclude(pa => pa.Author)
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.ProductImages)
+            .Where(p => p.PublisherId == publisherId)
+            .Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Description,
+                p.Quantity,
+                p.Price,
+                p.Cost,
+                p.PublisherId,
+                p.Status,
+                p.Hot,
+                p.PublishingYear,
+                p.CreatedAt,
+                p.UpdatedAt,
+                Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+                Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+                Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
+            });
 }

@@ -60,6 +60,21 @@ public class ProductController : ControllerBase
     }
 
 
+
+    [Produces("application/json")]
+    [HttpGet("ReadForPublisher")]
+    public IActionResult ReadForPublisher(int idPublisher)
+    {
+        try
+        {
+            return Ok(_productService.ReadForPublisher(idPublisher));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpGet("Get")]
