@@ -58,6 +58,7 @@ public class AccountService : IAccountService
             }
             account.UpdatedAt = DateTime.Now;
             account.SecurityCode = "-1";
+            account.Status = false;
             _databaseContext.Accounts.Update(account);
             return  _databaseContext.SaveChanges() > 0;
         }
