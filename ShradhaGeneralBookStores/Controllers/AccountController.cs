@@ -191,7 +191,7 @@ public class AccountController : ControllerBase
 
     [Produces("application/json")]
     [HttpPut("Delete/{id}")]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(int id,object a)
     {
         try
         {
