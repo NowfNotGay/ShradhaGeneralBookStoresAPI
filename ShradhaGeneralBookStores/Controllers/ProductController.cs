@@ -16,7 +16,8 @@ public class ProductController : ControllerBase
         _serviceCRUD = serviceCRUD;
         _productService = productService;
     }
-
+    //http get
+    //product manager get
     [Produces("application/json")]
     [HttpGet("Read")]
     public IActionResult Read()
@@ -30,6 +31,22 @@ public class ProductController : ControllerBase
             return BadRequest();
         }
     }
+
+    [Produces("application/json")]
+    [HttpGet("Get")]
+    public IActionResult Get(int id)
+    {
+        try
+        {
+            return Ok(_productService.GetById(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    // end product manager get
 
     [Produces("application/json")]
     [HttpGet("ReadForAuthor")]
@@ -75,19 +92,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [Produces("application/json")]
-    [HttpGet("Get")]
-    public IActionResult Get(int id)
-    {
-        try
-        {
-            return Ok(_productService.GetById(id));
-        }
-        catch
-        {
-            return BadRequest();
-        }
-    }
+    //end httpget
 
     [Consumes("application/json")]
     [Produces("application/json")]

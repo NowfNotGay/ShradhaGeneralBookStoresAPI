@@ -137,6 +137,8 @@ public class ProductService : IProductService
         Photo = _configuration["BaseURL"] + "Images/ProductImages/"+ p.ProductImages.First().ImagePath,
     });
 
+
+
     public dynamic ReadForAuthor(int idAuthor) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)
