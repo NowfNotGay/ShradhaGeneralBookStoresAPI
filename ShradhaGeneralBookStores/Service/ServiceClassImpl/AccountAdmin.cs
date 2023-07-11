@@ -27,7 +27,7 @@ public class AccountAdmin : IAccountAdmin
                 accountadd.Phone = account.Phone;
                 accountadd.Email = account.Email;
                 accountadd.Password = account.Password;
-                accountadd.Status = false;
+                accountadd.Status = true;
                 accountadd.Avatar = account.Avatar;
                 accountadd.CreatedAt = account.CreatedAt;
                 accountadd.UpdatedAt = account.UpdatedAt;
