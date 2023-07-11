@@ -93,7 +93,7 @@ public class AccountService : IAccountService
     public dynamic Read() => _databaseContext.Accounts
             .Include(a => a.AccountRoles)
             .ThenInclude(ar => ar.Role)
-            .Where(a=>a.Status == true)
+            .Where(a=>a.Status == true) 
             .Select(a => new
             {
                 a.Id,
