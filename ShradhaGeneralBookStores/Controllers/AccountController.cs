@@ -85,21 +85,18 @@ public class AccountController : ControllerBase
 
     //forget password start
     [Produces("application/json")]
-    [HttpPut("ForgetPassword")]
-    public IActionResult ForgetPassword(string email)
+    [HttpPut("ForgetPassword/{email}")]
+    public IActionResult ForgetPassword(string email, object a)
     {
         try
         {
             var account = _accountService.GetAccountOfEmailForgetPassword(email);
-            if (account == null)
-            {
-                return Ok(false);
-            }
-            account.SecurityCode = RandomHelper.RandomString(6);
+            account.Password = RandomHelper.RandomString(8);
             var mailhelper = new MailHelper(_configuration);
-            string contentmail = "<a href=\"https://localhost:7270/api/Account/CheckCodeForget?email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
+            string contentmail = $"Your new password:{account.Password}";
             mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
             account.UpdatedAt = DateTime.Now;
+            account.Password= BCrypt.Net.BCrypt.HashPassword(account.Password);
             return Ok(_serviceCRUD.Update(account));
         }
         catch
@@ -108,6 +105,8 @@ public class AccountController : ControllerBase
         }
     }
 
+
+    // zô tri
     [Produces("application/json")]
     [HttpPut("CheckCodeForget")]
     public IActionResult CheckCodeForget(string email, string securityCode)
@@ -144,7 +143,7 @@ public class AccountController : ControllerBase
         }
     }
     //forget password end 
-
+    // end zô tri
 
     //list account start
     [Produces("application/json")]

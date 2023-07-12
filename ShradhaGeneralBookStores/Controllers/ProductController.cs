@@ -76,6 +76,19 @@ public class ProductController : ControllerBase
         }
     }
 
+    [Produces("application/json")]
+    [HttpGet("ReadForCategoryUser")]
+    public IActionResult ReadForCategoryUser(int idCategory)
+    {
+        try
+        {
+            return Ok(_productService.ReadForCategoryUser(idCategory));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 
 
     [Produces("application/json")]

@@ -47,6 +47,18 @@ public class AccountService : IAccountService
         }
     }
 
+    public bool CheckDisableAccount(string email)
+    {
+        try
+        {
+            return _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == false && a.SecurityCode=="-1") != null ? true : false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public bool DisableAccount(int id)
     {
         try
