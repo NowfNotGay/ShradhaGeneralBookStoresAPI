@@ -46,6 +46,21 @@ public class ProductController : ControllerBase
         }
     }
 
+
+    [Produces("application/json")]
+    [HttpGet("GetUser")]
+    public IActionResult GetUser(int id)
+    {
+        try
+        {
+            return Ok(_productService.GetByIdUser(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
     // end product manager get
 
     [Produces("application/json")]

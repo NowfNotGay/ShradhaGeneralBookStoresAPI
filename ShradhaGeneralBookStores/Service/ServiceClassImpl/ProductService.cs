@@ -112,6 +112,32 @@ public class ProductService : IProductService
         Photos = p.ProductImages.Where(pi=>pi.ProductId == id).Select(pi=> _configuration["BaseURL"] + "Images/ProductImages/"+ pi.ImagePath)
     });
 
+    public dynamic GetByIdUser(int id) => _databaseContext.Products
+    .Include(p => p.ProductAuthors)
+    .ThenInclude(pa => pa.Author)
+    .Include(p => p.ProductCategories)
+    .ThenInclude(pc => pc.Category)
+    .Include(p => p.ProductImages)
+    .Where(p => p.Id == id)
+    .Select(p => new
+    {
+        p.Id,
+        p.Name,
+        p.Description,
+        p.Quantity,
+        p.Price,
+        p.Cost,
+        p.PublisherId,
+        p.Status,
+        p.Hot,
+        p.PublishingYear,
+        p.CreatedAt,
+        p.UpdatedAt,
+        Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+        Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+        Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
+    });
+
     public dynamic Read() => _databaseContext.Products
     .Include(p => p.ProductAuthors)
     .ThenInclude(pa => pa.Author)
@@ -136,8 +162,6 @@ public class ProductService : IProductService
         Categories = p.ProductCategories.Select(pc => pc.Category.Name),
         Photo = _configuration["BaseURL"] + "Images/ProductImages/"+ p.ProductImages.First().ImagePath,
     });
-
-
 
     public dynamic ReadForAuthor(int idAuthor) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
@@ -164,6 +188,7 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
+
     public dynamic ReadForCategory(int categoryId) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)
@@ -241,4 +266,5 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
+
 }

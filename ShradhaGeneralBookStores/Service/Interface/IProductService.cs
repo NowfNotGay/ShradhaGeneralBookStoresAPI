@@ -11,5 +11,6 @@ public interface IProductService
     public dynamic ReadForCategoryUser(int categoryId);
     public dynamic ReadForPublisher(int publisherId);
     public dynamic GetById(int id);
+    public dynamic GetByIdUser(int id);
 
 }
