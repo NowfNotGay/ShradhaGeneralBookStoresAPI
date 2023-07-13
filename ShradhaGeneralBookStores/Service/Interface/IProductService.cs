@@ -13,6 +13,6 @@ public interface IProductService
     public dynamic GetById(int id);
     public dynamic GetByIdUser(int id);
     public dynamic ReadByPrice(int min,int max);
-
+    public dynamic ReadForUser();
 
 }

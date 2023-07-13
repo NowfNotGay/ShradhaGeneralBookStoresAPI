@@ -106,6 +106,21 @@ public class ProductController : ControllerBase
     }
 
     [Produces("application/json")]
+    [HttpGet("ReadForUser")]
+    public IActionResult ReadForUser()
+    {
+        try
+        {
+            return Ok(_productService.ReadForUser());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+
+    [Produces("application/json")]
     [HttpGet("ReadByPrice")]
     public IActionResult ReadByPrice(int min,int max)
     {
