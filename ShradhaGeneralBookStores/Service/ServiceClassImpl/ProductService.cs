@@ -169,7 +169,7 @@ public class ProductService : IProductService
             .Include(p => p.ProductCategories)
             .ThenInclude(pc => pc.Category)
             .Include(p => p.ProductImages)
-            .Where(p => p.Cost <= min && p.Cost >= max)
+            .Where(p => p.Cost >= min && p.Cost <= max)
             .Select(p => new
             {
                 p.Id,
