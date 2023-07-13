@@ -26,7 +26,6 @@ public class AccountController : ControllerBase
     }
 
 
-
     //Register start
     [Produces("application/json")]
     [HttpPost("Register")]

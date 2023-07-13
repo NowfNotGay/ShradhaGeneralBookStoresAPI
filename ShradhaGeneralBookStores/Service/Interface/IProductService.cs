@@ -12,5 +12,7 @@ public interface IProductService
     public dynamic ReadForPublisher(int publisherId);
     public dynamic GetById(int id);
     public dynamic GetByIdUser(int id);
+    public dynamic ReadByPrice(int min,int max);
+
 
 }

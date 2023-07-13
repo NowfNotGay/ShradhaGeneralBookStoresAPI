@@ -105,6 +105,19 @@ public class ProductController : ControllerBase
         }
     }
 
+    [Produces("application/json")]
+    [HttpGet("ReadByPrice")]
+    public IActionResult ReadByPrice(int min,int max)
+    {
+        try
+        {
+            return Ok(_productService.ReadByPrice(min,max));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 
     [Produces("application/json")]
     [HttpGet("ReadForPublisher")]
