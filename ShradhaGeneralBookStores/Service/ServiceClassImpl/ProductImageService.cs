@@ -44,7 +44,6 @@ public class ProductImageService : IProductImageService
                 _databaseContext.SaveChanges();
                 transaction.Commit();
                 return true;
-
             }
 
 

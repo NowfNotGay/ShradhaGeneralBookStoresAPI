@@ -1,4 +1,5 @@
 ﻿using ShradhaGeneralBookStores.Models;
+using ShradhaGeneralBookStores.Models.ModelTemp;
 
 namespace ShradhaGeneralBookStores.Service.Interface;
 
@@ -14,4 +15,5 @@ public interface IAccountService
     public dynamic Get(int id);
     public dynamic GetByEmail(string email);
 
+    public bool UpdateProfile(Profile profile, IFormFile? avatar = null);
 }

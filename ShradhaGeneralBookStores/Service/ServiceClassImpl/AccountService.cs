@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using ShradhaGeneralBookStores.Models;
+using ShradhaGeneralBookStores.Models.ModelTemp;
 using ShradhaGeneralBookStores.Service.Interface;
 
 namespace ShradhaGeneralBookStores.Service.ServiceClassImpl;
@@ -8,11 +10,13 @@ public class AccountService : IAccountService
 {
     private readonly DatabaseContext _databaseContext;
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _webHostEnvironmentl;
 
-    public AccountService(DatabaseContext databaseContext, IConfiguration configuration)
+    public AccountService(DatabaseContext databaseContext, IConfiguration configuration, IWebHostEnvironment webHostEnvironmentl)
     {
         _databaseContext = databaseContext;
         _configuration = configuration;
+        _webHostEnvironmentl = webHostEnvironmentl;
     }
 
     public bool ActiveAccount(string email, string security)
@@ -144,7 +148,6 @@ public class AccountService : IAccountService
                 RoleId = a.AccountRoles.Select(ar => ar.Role.Id).ToList()
             });
     }
-
     public dynamic GetByEmail(string email)
     {
         return _databaseContext.Accounts
@@ -166,5 +169,35 @@ public class AccountService : IAccountService
                 a.UpdatedAt,
                 Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
             });
+    }
+
+    public bool UpdateProfile(Profile profile, IFormFile? avatar = null)
+    {
+        var account = _databaseContext.Accounts.FirstOrDefault(a=>a.Email == profile.Email);
+        account.FirstName = profile.FirstName;
+        account.LastName = profile.LastName;
+        account.Phone = profile.Phone;
+        if (avatar != null)
+        {
+            var filename = account.Id +"avatar" + avatar.FileName.Substring(avatar.FileName.LastIndexOf('.'));
+            var path = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", filename);
+            if (account.Avatar != "no-avatar.jpg")
+            {
+                var pathold = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", account.Avatar!);
+                if (System.IO.File.Exists(pathold))
+                {
+                    System.IO.File.Delete(pathold);
+                }
+            }
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                avatar.CopyTo(fileStream);
+            }
+            account.Avatar = filename;
+        };
+        account.UpdatedAt = DateTime.Now;
+        _databaseContext.Accounts.Update(account);
+
+        return _databaseContext.SaveChanges() >0;
     }
 }

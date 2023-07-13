@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ShradhaGeneralBookStores.Helpers;
 using ShradhaGeneralBookStores.Models;
+using ShradhaGeneralBookStores.Models.ModelTemp;
 using ShradhaGeneralBookStores.Service.Interface;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace ShradhaGeneralBookStores.Controllers;
 [Route("api/[controller]")]
@@ -225,6 +228,40 @@ public class AccountController : ControllerBase
     }
 
     //edit account admin
+    [Consumes("multipart/form-data")]
+    [Produces("application/json")]
+    [HttpPut("UpdateProfile")]
+    public IActionResult UpdateProfile(IFormFile avatar, IFormCollection formData)
+    {
+        try
+        {
+            var profile = JsonConvert.DeserializeObject<Profile>(formData["profile"]);
+            _accountService.UpdateProfile(profile, avatar);
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Consumes("multipart/form-data")]
+    [Produces("application/json")]
+    [HttpPut("UpdateProfileNoAvatar")]
+    public IActionResult UpdateProfileNoAvatar(IFormCollection formData)
+    {
+        try
+        {
+            var profile = JsonConvert.DeserializeObject<Profile>(formData["profile"]);
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    //edit profile account admin
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPut("Update")]
@@ -238,7 +275,7 @@ public class AccountController : ControllerBase
             account.UpdatedAt = DateTime.Now;
             account.Status = true;
             account.SecurityCode = a.SecurityCode;
-            account.Password = (account.Password != "")? BCrypt.Net.BCrypt.HashPassword(account.Password): a.Password;
+            account.Password = (account.Password != "") ? BCrypt.Net.BCrypt.HashPassword(account.Password) : a.Password;
             return Ok(_accountAdmin.UpdateRoleAccount(account));
         }
         catch
@@ -246,7 +283,6 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
     }
-
 
     //list account start
     [Produces("application/json")]
