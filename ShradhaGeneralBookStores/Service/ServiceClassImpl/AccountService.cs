@@ -231,4 +231,45 @@ public class AccountService : IAccountService
         }
         
     }
+
+    public dynamic ReadDisable() => _databaseContext.Accounts
+            .Include(a => a.AccountRoles)
+            .ThenInclude(ar => ar.Role)
+            .Where(a => a.Status == false && a.Id != 1)
+            .Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Password,
+                a.FirstName,
+                a.LastName,
+                a.Phone,
+                a.Avatar,
+                a.Status,
+                a.SecurityCode,
+                a.CreatedAt,
+                a.UpdatedAt,
+                Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
+            });
+
+    public bool EnableAccount(int id)
+    {
+        try
+        {
+            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Id == id);
+            if (account == null)
+            {
+                return false;
+            }
+            account.UpdatedAt = DateTime.Now;
+            account.SecurityCode = "-1";
+            account.Status = false;
+            _databaseContext.Accounts.Update(account);
+            return _databaseContext.SaveChanges() > 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

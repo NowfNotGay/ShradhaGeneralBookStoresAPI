@@ -384,7 +384,6 @@ public class ProductService : IProductService
                  Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
              });
 
-
     public dynamic ReadForUser() => _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)

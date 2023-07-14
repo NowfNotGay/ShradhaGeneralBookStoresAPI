@@ -162,6 +162,24 @@ public class AccountController : ControllerBase
         }
     }
 
+    //forget password end 
+    // end zô tri
+
+    //list account start
+    [Produces("application/json")]
+    [HttpGet("ReadDisable")]
+    public IActionResult ReadDisable()
+    {
+        try
+        {
+            return Ok(_accountService.ReadDisable());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
     [Produces("application/json")]
     [HttpGet("Get")]
     public IActionResult Get(int id)
@@ -308,6 +326,22 @@ public class AccountController : ControllerBase
         try
         {
             return Ok(_accountAdmin.GetRoleByAccountId(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+
+
+    [Produces("application/json")]
+    [HttpPut("EnableAccount/{id}")]
+    public IActionResult EnableAccount(int id, object a)
+    {
+        try
+        {
+            return Ok(_accountService.EnableAccount(id));
         }
         catch
         {

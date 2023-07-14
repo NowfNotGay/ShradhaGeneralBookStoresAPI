@@ -12,8 +12,10 @@ public interface IAccountService
     public bool ActiveAccount(string email,string security);
     public bool DisableAccount(int id);
     public dynamic Read();
+    public dynamic ReadDisable();
+
     public dynamic Get(int id);
     public dynamic GetByEmail(string email);
-
+    public bool EnableAccount(int id);
     public dynamic UpdateProfile(Profile profile, IFormFile? avatar = null);
 }
