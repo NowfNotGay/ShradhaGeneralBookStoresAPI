@@ -59,15 +59,13 @@ public class ProductImageController : ControllerBase
         }
     }
 
-    [Consumes("application/json")]
     [Produces("application/json")]
-    [HttpPut("Update")]
-    public IActionResult Update([FromBody] ProductImage productImage)
+    [HttpPut("Update/{productId}")]
+    public IActionResult Update(IFormFile[] photo, int productId)
     {
         try
         {
-            productImage.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Update(productImage));
+            return Ok(_productImageService.Update(productId, photo));
         }
         catch
         {

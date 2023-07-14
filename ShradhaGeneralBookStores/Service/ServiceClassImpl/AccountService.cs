@@ -110,7 +110,7 @@ public class AccountService : IAccountService
     public dynamic Read() => _databaseContext.Accounts
             .Include(a => a.AccountRoles)
             .ThenInclude(ar => ar.Role)
-            .Where(a=>a.Status == true) 
+            .Where(a=>a.Status == true && a.Id != 1) 
             .Select(a => new
             {
                 a.Id,
@@ -171,33 +171,64 @@ public class AccountService : IAccountService
             });
     }
 
-    public bool UpdateProfile(Profile profile, IFormFile? avatar = null)
+    public dynamic UpdateProfile(Profile profile, IFormFile? avatar = null)
     {
-        var account = _databaseContext.Accounts.FirstOrDefault(a=>a.Email == profile.Email);
-        account.FirstName = profile.FirstName;
-        account.LastName = profile.LastName;
-        account.Phone = profile.Phone;
-        if (avatar != null)
+        try
         {
-            var filename = account.Id +"avatar" + avatar.FileName.Substring(avatar.FileName.LastIndexOf('.'));
-            var path = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", filename);
-            if (account.Avatar != "no-avatar.jpg")
+            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Email == profile.Email);
+            account.FirstName = profile.FirstName;
+            account.LastName = profile.LastName;
+            account.Phone = profile.Phone;
+            if (avatar != null)
             {
-                var pathold = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", account.Avatar!);
-                if (System.IO.File.Exists(pathold))
+                var filename = account.Id + "avatar" + avatar.FileName.Substring(avatar.FileName.LastIndexOf('.'));
+                var path = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", filename);
+                if (account.Avatar != "no-avatar.jpg")
                 {
-                    System.IO.File.Delete(pathold);
+                    var pathold = Path.Combine(_webHostEnvironmentl.WebRootPath, "Images/Avatars", account.Avatar!);
+                    if (System.IO.File.Exists(pathold))
+                    {
+                        System.IO.File.Delete(pathold);
+                    }
                 }
-            }
-            using (var fileStream = new FileStream(path, FileMode.Create))
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    avatar.CopyTo(fileStream);
+                }
+                account.Avatar = filename;
+            };
+            account.UpdatedAt = DateTime.Now;
+            _databaseContext.Accounts.Update(account);
+            if (_databaseContext.SaveChanges() > 0)
             {
-                avatar.CopyTo(fileStream);
-            }
-            account.Avatar = filename;
-        };
-        account.UpdatedAt = DateTime.Now;
-        _databaseContext.Accounts.Update(account);
+                return _databaseContext.Accounts
+            .Include(a => a.AccountRoles)
+            .ThenInclude(ar => ar.Role)
+            .Where(a => a.Email == profile.Email)
+            .Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Password,
+                a.FirstName,
+                a.LastName,
+                a.Phone,
+                Avatar = _configuration["BaseURL"] + "Images/Avatars/" + a.Avatar,
+                a.Status,
+                a.SecurityCode,
+                a.CreatedAt,
+                a.UpdatedAt,
+                Roles = a.AccountRoles.Select(ar => ar.Role.Name).ToList()
+            }); ;
 
-        return _databaseContext.SaveChanges() >0;
+            }
+            else
+                return null;
+        }
+        catch 
+        {
+            return null;
+        }
+        
     }
 }

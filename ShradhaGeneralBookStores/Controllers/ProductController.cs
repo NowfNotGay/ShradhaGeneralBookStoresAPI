@@ -150,6 +150,8 @@ public class ProductController : ControllerBase
 
     //end httpget
 
+
+    //httppost
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
@@ -185,4 +187,24 @@ public class ProductController : ControllerBase
             return BadRequest();
         }
     }
+    //end httppost
+
+
+    //httpput
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPut("Update")]
+    public IActionResult Update([FromBody] ProductAPI product)
+    {
+        try
+        {
+            product.UpdatedAt = DateTime.Now;
+            return Ok(_productService.UpdateProduct(product));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+    //end httpput
 }

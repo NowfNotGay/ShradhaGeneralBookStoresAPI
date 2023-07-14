@@ -236,8 +236,7 @@ public class AccountController : ControllerBase
         try
         {
             var profile = JsonConvert.DeserializeObject<Profile>(formData["profile"]);
-            _accountService.UpdateProfile(profile, avatar);
-            return Ok();
+            return Ok(_accountService.UpdateProfile(profile, avatar));
         }
         catch
         {
@@ -253,7 +252,8 @@ public class AccountController : ControllerBase
         try
         {
             var profile = JsonConvert.DeserializeObject<Profile>(formData["profile"]);
-            return Ok();
+
+            return Ok(_accountService.UpdateProfile(profile));
         }
         catch
         {

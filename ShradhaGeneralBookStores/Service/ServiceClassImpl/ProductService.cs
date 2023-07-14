@@ -317,4 +317,78 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
             });
+
+    public int UpdateProduct(ProductAPI product)
+    {
+        try
+        {
+            using (var transaction = _databaseContext.Database.BeginTransaction())
+            {
+                #region phân loại product
+                var productUpdate = _databaseContext.Products.Find(product.Id);
+                product.Name = product.Name;
+                productUpdate.Description = product.Description;
+                productUpdate.Quantity = product.Quantity;
+                productUpdate.Price = product.Price;
+                productUpdate.Cost = product.Cost;
+                productUpdate.Status = product.Status;
+                productUpdate.Hot = product.Hot;
+                productUpdate.PublisherId = product.PublisherId;
+                productUpdate.PublishingYear = product.PublishingYear;
+                productUpdate.CreatedAt = product.CreatedAt;
+                productUpdate.UpdatedAt = product.UpdatedAt;
+                _databaseContext.Products.Update(productUpdate);
+                _databaseContext.SaveChanges();
+                #endregion
+
+                #region phân loại bảng n - n (category - product)
+                _databaseContext.ProductCategories.RemoveRange(_databaseContext.ProductCategories.Where(pc => pc.ProductId == productUpdate.Id));
+
+                product.CategoriesId.ForEach(categoryId =>
+                {
+                    var productcategory = new ProductCategory()
+                    {
+                        CategoryId = categoryId,
+                        ProductId = productUpdate.Id,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+                    _databaseContext.ProductCategories.Add(productcategory);
+                });
+                _databaseContext.SaveChanges();
+                #endregion
+
+                #region phân loại bảng n - n (author - product)
+
+                _databaseContext.ProductAuthors.RemoveRange(_databaseContext.ProductAuthors.Where(pa => pa.ProductId == productUpdate.Id));
+
+                product.AuthorsId.ForEach(authorId =>
+                {
+                    var productAuthor = new ProductAuthor()
+                    {
+                        AuthorId = authorId,
+                        ProductId = productUpdate.Id,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+                    _databaseContext.ProductAuthors.Add(productAuthor);
+                });
+                _databaseContext.SaveChanges();
+                #endregion
+
+                //làm xong trả về id Product
+                transaction.Commit();
+                return productUpdate.Id;
+            }
+        }
+        catch (Exception)
+        {
+            using (var transaction = _databaseContext.Database.BeginTransaction())
+            {
+                transaction.Rollback();
+            }
+            // lỗi trả về -1 
+            return -1;
+        }
+    }
 }

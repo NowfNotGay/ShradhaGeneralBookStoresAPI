@@ -15,5 +15,5 @@ public interface IAccountService
     public dynamic Get(int id);
     public dynamic GetByEmail(string email);
 
-    public bool UpdateProfile(Profile profile, IFormFile? avatar = null);
+    public dynamic UpdateProfile(Profile profile, IFormFile? avatar = null);
 }
