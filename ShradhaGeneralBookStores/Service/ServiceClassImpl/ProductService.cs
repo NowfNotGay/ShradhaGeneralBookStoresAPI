@@ -484,4 +484,19 @@ public class ProductService : IProductService
             return -1;
         }
     }
+
+    public bool EnableProduct(int id)
+    {
+        try
+        {
+            var product = _databaseContext.Products.Find(id);
+            product.Status = true;
+            _databaseContext.Products.Update(product);
+            return _databaseContext.SaveChanges() > 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

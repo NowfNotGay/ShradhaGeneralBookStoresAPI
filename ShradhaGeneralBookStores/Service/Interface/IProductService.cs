@@ -20,4 +20,5 @@ public interface IProductService
     public dynamic ReadForPublisherUser(int publisherId);
     public dynamic ReadForAuthorUser(int idAuthor);
 
+    public bool EnableProduct(int id);
 }

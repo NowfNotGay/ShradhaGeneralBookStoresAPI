@@ -34,11 +34,11 @@ public class ProductController : ControllerBase
 
     [Produces("application/json")]
     [HttpGet("ReadDisable")]
-    public IActionResult Read()
+    public IActionResult ReadDisable()
     {
         try
         {
-            return Ok(_productService.Read());
+            return Ok(_productService.ReadDisable());
         }
         catch
         {
