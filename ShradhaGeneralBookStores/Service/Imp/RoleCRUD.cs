@@ -51,7 +51,7 @@ namespace ShradhaGeneralBookStores.Service.Imp
             r.UpdatedAt
         });
 
-        public dynamic Read() => _databaseContext.Roles.Select(r => new
+        public dynamic Read() => _databaseContext.Roles.Where(r=>r.Id != 1).Select(r => new
         {
             r.Id,
             r.Name,
