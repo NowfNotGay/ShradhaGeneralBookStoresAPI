@@ -264,5 +264,22 @@ public class ProductController : ControllerBase
             return BadRequest();
         }
     }
-    //delete
+    //end delete
+
+
+    // enable
+    [Produces("application/json")]
+    [HttpPut("EnableProduct/{id}")]
+    public IActionResult EnableProduct(int id, Object a)
+    {
+        try
+        {
+            return Ok(_productService.EnableProduct(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+    // end enable
 }
