@@ -33,6 +33,20 @@ public class ProductController : ControllerBase
     }
 
     [Produces("application/json")]
+    [HttpGet("ReadDisable")]
+    public IActionResult Read()
+    {
+        try
+        {
+            return Ok(_productService.Read());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
     [HttpGet("Get")]
     public IActionResult Get(int id)
     {
@@ -70,6 +84,20 @@ public class ProductController : ControllerBase
         try
         {
             return Ok(_productService.ReadForAuthor(idAuthor));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("ReadForAuthorUser")]
+    public IActionResult ReadForAuthorUser(int idAuthor)
+    {
+        try
+        {
+            return Ok(_productService.ReadForAuthorUser(idAuthor));
         }
         catch
         {
@@ -148,6 +176,19 @@ public class ProductController : ControllerBase
         }
     }
 
+    [Produces("application/json")]
+    [HttpGet("ReadForPublisherUser")]
+    public IActionResult ReadForPublisherUser(int idPublisher)
+    {
+        try
+        {
+            return Ok(_productService.ReadForPublisherUser(idPublisher));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
     //end httpget
 
 
@@ -207,4 +248,21 @@ public class ProductController : ControllerBase
         }
     }
     //end httpput
+
+
+    //delete
+    [Produces("application/json")]
+    [HttpPut("Deleted/{id}")]
+    public IActionResult DeleteProduct(int id, Object a)
+    {
+        try
+        {
+            return Ok(_productService.DeleteProduct(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+    //delete
 }

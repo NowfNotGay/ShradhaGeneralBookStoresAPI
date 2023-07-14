@@ -15,4 +15,9 @@ public interface IProductService
     public dynamic ReadByPrice(int min,int max);
     public dynamic ReadForUser();
     public int UpdateProduct(ProductAPI product);
+    public bool DeleteProduct(int id);
+    public dynamic ReadDisable();
+    public dynamic ReadForPublisherUser(int publisherId);
+    public dynamic ReadForAuthorUser(int idAuthor);
+
 }

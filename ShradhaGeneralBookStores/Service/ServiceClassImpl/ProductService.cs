@@ -86,6 +86,21 @@ public class ProductService : IProductService
         }
     }
 
+    public bool DeleteProduct(int id)
+    {
+        try
+        {
+            var product = _databaseContext.Products.Find(id);
+            product.Status = false;
+            _databaseContext.Products.Update(product);
+            return _databaseContext.SaveChanges() > 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public dynamic GetById(int id) => _databaseContext.Products
     .Include(p => p.ProductAuthors)
     .ThenInclude(pa => pa.Author)
@@ -144,6 +159,7 @@ public class ProductService : IProductService
     .Include(p => p.ProductCategories)
     .ThenInclude(pc => pc.Category)
     .Include(p => p.ProductImages)
+    .Where(p=>p.Status == true)
     .Select(p => new
     {
         p.Id,
@@ -162,6 +178,31 @@ public class ProductService : IProductService
         Categories = p.ProductCategories.Select(pc => pc.Category.Name),
         Photo = _configuration["BaseURL"] + "Images/ProductImages/"+ p.ProductImages.First().ImagePath,
     });
+    public dynamic ReadDisable() => _databaseContext.Products
+        .Include(p => p.ProductAuthors)
+        .ThenInclude(pa => pa.Author)
+        .Include(p => p.ProductCategories)
+        .ThenInclude(pc => pc.Category)
+        .Include(p => p.ProductImages)
+        .Where(p => p.Status == false)
+        .Select(p => new
+        {
+            p.Id,
+            p.Name,
+            p.Description,
+            p.Quantity,
+            p.Price,
+            p.Cost,
+            p.PublisherId,
+            p.Status,
+            p.Hot,
+            p.PublishingYear,
+            p.CreatedAt,
+            p.UpdatedAt,
+            Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+            Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+            Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
+        });
 
     public dynamic ReadByPrice(int min, int max) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
@@ -214,6 +255,31 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
+    public dynamic ReadForAuthorUser(int idAuthor) => _databaseContext.Products
+            .Include(p => p.ProductAuthors)
+            .ThenInclude(pa => pa.Author)
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.ProductImages)
+            .Where(p => p.ProductAuthors.Any(pa => pa.AuthorId == idAuthor))
+            .Select(p => new
+             {
+                 p.Id,
+                 p.Name,
+                 p.Description,
+                 p.Quantity,
+                 p.Price,
+                 p.Cost,
+                 p.PublisherId,
+                 p.Status,
+                 p.Hot,
+                 p.PublishingYear,
+                 p.CreatedAt,
+                 p.UpdatedAt,
+                 Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+                 Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
+             });
 
     public dynamic ReadForCategory(int categoryId) => _databaseContext.Products
             .Include(p => p.ProductAuthors)
@@ -292,6 +358,32 @@ public class ProductService : IProductService
                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
                 Photo = _configuration["BaseURL"] + "Images/ProductImages/" + p.ProductImages.First().ImagePath,
             });
+    public dynamic ReadForPublisherUser(int publisherId) => _databaseContext.Products
+            .Include(p => p.ProductAuthors)
+            .ThenInclude(pa => pa.Author)
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.ProductImages)
+            .Where(p => p.PublisherId == publisherId)
+             .Select(p => new
+             {
+                 p.Id,
+                 p.Name,
+                 p.Description,
+                 p.Quantity,
+                 p.Price,
+                 p.Cost,
+                 p.PublisherId,
+                 p.Status,
+                 p.Hot,
+                 p.PublishingYear,
+                 p.CreatedAt,
+                 p.UpdatedAt,
+                 Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+                 Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+                 Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
+             });
+
 
     public dynamic ReadForUser() => _databaseContext.Products
             .Include(p => p.ProductAuthors)
@@ -299,6 +391,7 @@ public class ProductService : IProductService
             .Include(p => p.ProductCategories)
             .ThenInclude(pc => pc.Category)
             .Include(p => p.ProductImages)
+            .Where(p=>p.Status == true)
             .Select(p => new
             {
                 p.Id,
