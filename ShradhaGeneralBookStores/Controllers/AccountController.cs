@@ -352,7 +352,7 @@ public class AccountController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPut("ChangePassword")]
-    public IActionResult ChangePassword(ChangePassword changePassword)
+    public IActionResult ChangePassword([FromBody]ChangePassword changePassword)
     {
         try
         {
