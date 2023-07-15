@@ -348,4 +348,19 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
     }
+
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPut("ChangePassword")]
+    public IActionResult ChangePassword(ChangePassword changePassword)
+    {
+        try
+        {
+            return Ok(_accountService.ChangePassword(changePassword));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }
