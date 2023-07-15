@@ -445,7 +445,7 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Location).HasMaxLength(100);
+            entity.Property(e => e.Location).HasMaxLength(1000);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.NameShort).HasMaxLength(10);
             entity.Property(e => e.UpdatedAt)

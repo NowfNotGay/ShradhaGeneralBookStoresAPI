@@ -13,7 +13,6 @@ public interface IAccountService
     public bool DisableAccount(int id);
     public dynamic Read();
     public dynamic ReadDisable();
-
     public dynamic Get(int id);
     public dynamic GetByEmail(string email);
     public bool EnableAccount(int id);
