@@ -48,6 +48,8 @@ builder.Services.AddScoped<IAccountRoleService, AccountRoleService>();
 builder.Services.AddScoped<IAccountAdmin, AccountAdmin>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductImageService, ProductImageService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 
 builder.Services.AddScoped<DatabaseContext>();

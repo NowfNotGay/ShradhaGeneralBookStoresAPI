@@ -9,10 +9,12 @@ namespace ShradhaGeneralBookStores.Controllers;
 public class AuthorController : ControllerBase
 {
     private readonly IServiceCRUD<Author> _serviceCRUD;
+    private readonly IAuthorService _authorService;
 
-    public AuthorController(IServiceCRUD<Author> serviceCRUD)
+    public AuthorController(IServiceCRUD<Author> serviceCRUD, IAuthorService authorService)
     {
         _serviceCRUD = serviceCRUD;
+        _authorService = authorService;
     }
     [Produces("application/json")]
     [HttpGet("Read")]
@@ -27,6 +29,21 @@ public class AuthorController : ControllerBase
             return BadRequest();
         }
     }
+
+    [Produces("application/json")]
+    [HttpGet("ReadForMenu")]
+    public IActionResult ReadForMenu()
+    {
+        try
+        {
+            return Ok(_authorService.GetForMenu());
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
 
     [Consumes("application/json")]
     [Produces("application/json")]
