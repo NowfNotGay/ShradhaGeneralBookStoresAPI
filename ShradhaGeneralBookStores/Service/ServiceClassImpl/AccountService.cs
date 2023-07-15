@@ -272,4 +272,23 @@ public class AccountService : IAccountService
             return false;
         }
     }
+
+    public bool ChangePassword(ChangePassword changePassword)
+    {
+        try
+        {
+            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Id == changePassword.Id);
+            if (account == null || !BCrypt.Net.BCrypt.Verify(changePassword.OldPassword, account.Password))
+            {
+                return false;
+            }
+            account.Password = BCrypt.Net.BCrypt.HashPassword(changePassword.NewPassword);
+            _databaseContext.Accounts.Update(account);
+            return _databaseContext.SaveChanges() > 0;
+        }
+        catch 
+        { 
+            return false; 
+        }
+    }
 }
