@@ -15,6 +15,8 @@ public class AddressProfileController : ControllerBase
         _serviceCRUD = serviceCRUD;
     }
 
+    [Produces("application/json")]
+    [HttpPost("Read")]
     public IActionResult Read()
     {
         try
