@@ -19,7 +19,7 @@ public partial class AddressProfile
 
     public DateTime UpdatedAt { get; set; }
 
-    public virtual Account Account { get; set; } = null!;
+    public virtual Account? Account { get; set; } = null!;
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

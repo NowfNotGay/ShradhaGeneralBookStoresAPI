@@ -89,7 +89,7 @@ public class ProductController : ControllerBase
         {
             return BadRequest();
         }
-    }
+    } 
 
     [Produces("application/json")]
     [HttpGet("ReadForAuthorUser")]
