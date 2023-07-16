@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShradhaGeneralBookStores.Models;
+using ShradhaGeneralBookStores.Models.ModelTemp;
 using ShradhaGeneralBookStores.Service.Interface;
 
 namespace ShradhaGeneralBookStores.Controllers;
@@ -9,10 +10,11 @@ namespace ShradhaGeneralBookStores.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IServiceCRUD<Order> _serviceCRUD;
-
-    public OrderController(IServiceCRUD<Order> serviceCRUD)
+    private readonly IOrderService _orderService;
+    public OrderController(IServiceCRUD<Order> serviceCRUD, IOrderService orderService)
     {
         _serviceCRUD = serviceCRUD;
+        _orderService = orderService;
     }
     [Produces("application/json")]
     [HttpGet("Read")]
@@ -45,14 +47,12 @@ public class OrderController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]
-    public IActionResult Create([FromBody] Order order)
+    public IActionResult Create([FromBody]OrderAPI orderAPI)
 
     {
         try
         {
-            order.CreatedAt = DateTime.Now;
-            order.UpdatedAt = DateTime.Now;
-            return Ok(_serviceCRUD.Create(order));
+            return Ok(_orderService.Create(orderAPI));
         }
         catch
         {
