@@ -14,7 +14,7 @@ public class OrderAPI
 
     public int PaymentMethodId { get; set; }
 
-    public List<OrderDetail> listOrderDetail { get; set; } = new List<OrderDetail>();
+    public List<OrderDetail> ListOrderDetail { get; set; } = new List<OrderDetail>();
 
 }
 
