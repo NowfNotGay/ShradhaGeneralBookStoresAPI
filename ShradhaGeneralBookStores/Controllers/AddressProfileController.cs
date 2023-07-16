@@ -16,7 +16,7 @@ public class AddressProfileController : ControllerBase
     }
 
     [Produces("application/json")]
-    [HttpPost("Read")]
+    [HttpPut("Read")]
     public IActionResult Read()
     {
         try
