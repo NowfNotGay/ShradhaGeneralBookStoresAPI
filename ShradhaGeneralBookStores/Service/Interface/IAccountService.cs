@@ -9,7 +9,7 @@ public interface IAccountService
     public bool CheckExistsForEmail(string email);
     public Account GetAccountOfEmailForgetPassword(string email);
     public Account GetAccountForForgetPassword(string email,string securityCode);
-    public bool ActiveAccount(string email,string security);
+    public bool ActiveAccount(int id, string security);
     public bool DisableAccount(int id);
     public dynamic Read();
     public dynamic ReadDisable();
@@ -19,5 +19,5 @@ public interface IAccountService
     public dynamic UpdateProfile(Profile profile, IFormFile? avatar = null);
     public bool ChangePassword(ChangePassword changePassword);
 
-    public bool Register(AccountAPI accountapi);
+    public int Register(AccountAPI accountapi);
 }

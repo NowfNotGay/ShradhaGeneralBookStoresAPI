@@ -20,12 +20,13 @@ public class AccountService : IAccountService
         _webHostEnvironmentl = webHostEnvironmentl;
     }
 
-    public bool ActiveAccount(string email, string security)
+    public bool ActiveAccount(int id, string security)
     {
         try
         {
-            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.SecurityCode == security);
-            if (account == null)
+            Account account = _databaseContext.Accounts.FirstOrDefault(a=>a.Id == id);
+             
+            if (account.SecurityCode.Equals(security))
             {
                 return false;
             }
@@ -294,7 +295,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public bool Register(AccountAPI accountapi)
+    public int Register(AccountAPI accountapi)
     {
         try
         {
@@ -325,7 +326,7 @@ public class AccountService : IAccountService
                 });
                 var a = _databaseContext.SaveChanges();
                 transaction.Commit();
-                return a > 0;
+                return account.Id;
             }
         }
         catch
@@ -333,7 +334,7 @@ public class AccountService : IAccountService
             using (var transaction = _databaseContext.Database.BeginTransaction())
             {
                 transaction.Rollback();
-                return false;
+                return -1;
             }
         }
     }

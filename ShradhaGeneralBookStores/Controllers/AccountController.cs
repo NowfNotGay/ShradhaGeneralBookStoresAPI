@@ -42,9 +42,15 @@ public class AccountController : ControllerBase
             account.Status = false;
             account.SecurityCode = RandomHelper.RandomString(6);
             var mailhelper = new MailHelper(_configuration);
-            string contentmail = "<a href=\"http://localhost:4400/Active;email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
-            mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
-            return Ok(_accountService.Register(account));
+            var a = _accountService.Register(account);
+            if (a > 0)
+            {
+                string contentmail = "<a href=\"http://localhost:4400/active;id=" + a+ "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
+                mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
+                return Ok(true);
+            } 
+            
+            return Ok(false);
         }
         catch
         {
@@ -54,11 +60,11 @@ public class AccountController : ControllerBase
 
     [Produces("application/json")]
     [HttpGet("Active")]
-    public IActionResult Active(string email, string securitycode)
+    public IActionResult Active(int id, string securitycode)
     {
         try
         {
-            return Ok(_accountService.ActiveAccount(email, securitycode));
+            return Ok(_accountService.ActiveAccount(id, securitycode));
         }
         catch
         {
