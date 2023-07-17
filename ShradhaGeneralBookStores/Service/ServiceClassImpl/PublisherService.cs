@@ -12,7 +12,7 @@ public class PublisherService : IPublisherService
         _databaseContext = databaseContext;
     }
 
-    public dynamic GetForMenu() => _databaseContext.Publishers.OrderBy(p => p.Products.Count()).Take(10).Select(p => new
+    public dynamic GetForMenu() => _databaseContext.Publishers.OrderByDescending(p => p.Products.Count()).Take(10).Select(p => new
     {
         p.Id,
         p.Name,

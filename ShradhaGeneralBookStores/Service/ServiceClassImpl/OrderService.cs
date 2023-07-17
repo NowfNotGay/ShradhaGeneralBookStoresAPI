@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Identity.Client;
 using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Models.ModelTemp;
 using ShradhaGeneralBookStores.Service.Interface;
@@ -14,7 +15,7 @@ public class OrderService : IOrderService
         _databaseContext = databaseContext;
     }
 
-    public bool Create(OrderAPI orderAPI)
+    public int Create(OrderAPI orderAPI)
     {
         try
         {
@@ -52,7 +53,7 @@ public class OrderService : IOrderService
                 }
                 var a = _databaseContext.SaveChanges();
                 transaction.Commit();
-                return a > 0;
+                return order.Id;
             }
         }
         catch
@@ -60,8 +61,74 @@ public class OrderService : IOrderService
             using (var transaction = _databaseContext.Database.BeginTransaction())
             {
                 transaction.Rollback();
-                return false;
+                return -1;
             }
         }
     }
+
+    public dynamic GetByAccountId(int accountId) 
+        => _databaseContext.Orders.Where(o => o.AccountId == accountId).Select(o => new
+    {
+        o.Id,
+        o.AccountId,
+        o.TotalPrice,
+        o.StatusId,
+        StatusPayment = o.Status.Name,
+        o.AddressId,
+        Address = o.Address.Street +" "+o.Address.District + " " + o.Address.City,
+        o.VoucherId,
+        o.PaymentMethodId,
+        PaymentMethod = o.PaymentMethod.Name,
+        o.CreatedAt,
+            o.UpdatedAt
+        });
+
+    public dynamic GetById(int id) => _databaseContext.Orders.Where(o => o.Id == id).Select(o => new
+    {
+        o.Id,
+        o.AccountId,
+        o.TotalPrice,
+        o.StatusId,
+        StatusPayment = o.Status.Name,
+        o.AddressId,
+        Address = o.Address.Street + " " + o.Address.District + " " + o.Address.City,
+        o.VoucherId,
+        o.PaymentMethodId,
+        PaymentMethod = o.PaymentMethod.Name,
+        o.CreatedAt,
+        o.UpdatedAt
+    });
+
+    public bool Paid(int orderId)
+    {
+        try
+        {
+            var o = _databaseContext.Orders.Find(orderId);
+            o.StatusId = 9;
+            o.Status = _databaseContext.OrderStatuses.Find(9)!;
+            o.UpdatedAt = DateTime.Now;
+            _databaseContext.Orders.Update(o);
+            return _databaseContext.SaveChanges() >0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public dynamic Read() => _databaseContext.Orders.Select(o => new
+    {
+        o.Id,
+        o.AccountId,
+        o.TotalPrice,
+        o.StatusId,
+        StatusPayment = o.Status.Name,
+        o.AddressId,
+        Address = o.Address.Street + " " + o.Address.District + " " + o.Address.City,
+        o.VoucherId,
+        o.PaymentMethodId,
+        PaymentMethod = o.PaymentMethod.Name,
+        o.CreatedAt,
+        o.UpdatedAt
+    });
 }

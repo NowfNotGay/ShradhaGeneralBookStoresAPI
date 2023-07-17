@@ -12,7 +12,7 @@ public class AuthorService : IAuthorService
         _databaseContext = databaseContext;
     }
 
-    public dynamic GetForMenu() => _databaseContext.Authors.OrderBy(p => p.ProductAuthors.Count()).Take(10).Select(au => new
+    public dynamic GetForMenu() => _databaseContext.Authors.OrderByDescending(p => p.ProductAuthors.Count()).Take(10).Select(au => new
     {
         au.Id,
         au.Name,

@@ -22,7 +22,7 @@ public class OrderController : ControllerBase
     {
         try
         {
-            return Ok(_serviceCRUD.Read());
+            return Ok(_orderService.Read());
         }
         catch
         {
@@ -30,10 +30,9 @@ public class OrderController : ControllerBase
         }
     }
 
-    [Consumes("application/json")]
     [Produces("application/json")]
     [HttpGet("Get")]
-    public IActionResult Read(int id)
+    public IActionResult Get(int id)
     {
         try
         {
@@ -44,6 +43,50 @@ public class OrderController : ControllerBase
             return BadRequest();
         }
     }
+
+    [Produces("application/json")]
+    [HttpGet("Paid")]
+    public IActionResult Paid(int id)
+    {
+        try
+        {
+            return Ok(_orderService.Paid(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("GetByAccountId")]
+    public IActionResult GetByAccountId(int id)
+    {
+        try
+        {
+            return Ok(_orderService.GetByAccountId(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("GetById")]
+    public IActionResult GetById(int id)
+    {
+        try
+        {
+            return Ok(_orderService.GetById(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("Create")]

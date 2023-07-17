@@ -1,4 +1,5 @@
 using BaiThiWEBAPI.Converters;
+using ShradhaGeneralBookStores.Controllers;
 using ShradhaGeneralBookStores.Converters;
 using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Service.Imp;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
 
 builder.Services.AddScoped<DatabaseContext>();
