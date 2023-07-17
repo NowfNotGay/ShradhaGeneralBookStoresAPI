@@ -42,7 +42,7 @@ public class AccountController : ControllerBase
             account.Status = false;
             account.SecurityCode = RandomHelper.RandomString(6);
             var mailhelper = new MailHelper(_configuration);
-            string contentmail = "<a href=\"https://localhost:4400/Active;email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
+            string contentmail = "<a href=\"http://localhost:4400/Active;email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
             mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
             return Ok(_accountService.Register(account));
         }
