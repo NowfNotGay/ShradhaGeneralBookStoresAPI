@@ -32,7 +32,7 @@ public class AccountController : ControllerBase
     //Register start
     [Produces("application/json")]
     [HttpPost("Register")]
-    public IActionResult Register([FromBody] Account account)
+    public IActionResult Register([FromBody] AccountAPI account)
     {
         try
         {   //Date cập nhật và date tạo
@@ -41,11 +41,10 @@ public class AccountController : ControllerBase
             account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
             account.Status = false;
             account.SecurityCode = RandomHelper.RandomString(6);
-            Debug.WriteLine(account);
             var mailhelper = new MailHelper(_configuration);
-            string contentmail = "<a href=\"https://localhost:7270/api/Account/Active?email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
+            string contentmail = "<a href=\"https://localhost:4400/Active;email=" + account.Email + "&securitycode=" + account.SecurityCode + "\">Nhấn để kích hoạt</a>";
             mailhelper.Send(_configuration["Gmail:Username"]!, account.Email, "Verify Mail", contentmail);
-            return Ok(_serviceCRUD.Create(account));
+            return Ok(_accountService.Register(account));
         }
         catch
         {
@@ -54,7 +53,7 @@ public class AccountController : ControllerBase
     }
 
     [Produces("application/json")]
-    [HttpPut("Active")]
+    [HttpGet("Active")]
     public IActionResult Active(string email, string securitycode)
     {
         try

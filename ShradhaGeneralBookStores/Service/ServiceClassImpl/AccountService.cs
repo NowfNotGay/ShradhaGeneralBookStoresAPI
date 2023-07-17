@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using ShradhaGeneralBookStores.Models;
 using ShradhaGeneralBookStores.Models.ModelTemp;
 using ShradhaGeneralBookStores.Service.Interface;
@@ -41,12 +42,12 @@ public class AccountService : IAccountService
 
     public bool CheckExistsForEmail(string email)
     {
-        try 
+        try
         {
-            return _databaseContext.Accounts.FirstOrDefault(a => a.Email == email) != null ? true: false;
+            return _databaseContext.Accounts.FirstOrDefault(a => a.Email == email) != null ? true : false;
         }
-        catch 
-        { 
+        catch
+        {
             return false;
         }
     }
@@ -55,7 +56,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            return _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == false && a.SecurityCode=="-1") != null ? true : false;
+            return _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == false && a.SecurityCode == "-1") != null ? true : false;
         }
         catch
         {
@@ -68,7 +69,7 @@ public class AccountService : IAccountService
         try
         {
             var account = _databaseContext.Accounts.FirstOrDefault(a => a.Id == id);
-            if(account == null)
+            if (account == null)
             {
                 return false;
             }
@@ -76,7 +77,7 @@ public class AccountService : IAccountService
             account.SecurityCode = "-1";
             account.Status = false;
             _databaseContext.Accounts.Update(account);
-            return  _databaseContext.SaveChanges() > 0;
+            return _databaseContext.SaveChanges() > 0;
         }
         catch
         {
@@ -86,7 +87,7 @@ public class AccountService : IAccountService
 
     public Account GetAccountForForgetPassword(string email, string securityCode) => _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.SecurityCode == securityCode)!;
 
-    public Account GetAccountOfEmailForgetPassword(string email) => _databaseContext.Accounts.FirstOrDefault(a=>a.Email == email && a.Status == true)!;
+    public Account GetAccountOfEmailForgetPassword(string email) => _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == true)!;
 
     public bool Login(string email, string password)
     {
@@ -97,7 +98,8 @@ public class AccountService : IAccountService
             {
                 return false;
             }
-            if (!BCrypt.Net.BCrypt.Verify(password, account.Password)) {
+            if (!BCrypt.Net.BCrypt.Verify(password, account.Password))
+            {
                 return false;
             }
             return true;
@@ -110,7 +112,7 @@ public class AccountService : IAccountService
     public dynamic Read() => _databaseContext.Accounts
             .Include(a => a.AccountRoles)
             .ThenInclude(ar => ar.Role)
-            .Where(a=>a.Status == true && a.Id != 1) 
+            .Where(a => a.Status == true && a.Id != 1)
             .Select(a => new
             {
                 a.Id,
@@ -225,11 +227,11 @@ public class AccountService : IAccountService
             else
                 return null;
         }
-        catch 
+        catch
         {
             return null;
         }
-        
+
     }
 
     public dynamic ReadDisable() => _databaseContext.Accounts
@@ -286,9 +288,53 @@ public class AccountService : IAccountService
             _databaseContext.Accounts.Update(account);
             return _databaseContext.SaveChanges() > 0;
         }
-        catch 
-        { 
-            return false; 
+        catch
+        {
+            return false;
+        }
+    }
+
+    public bool Register(AccountAPI accountapi)
+    {
+        try
+        {
+            using (var transaction = _databaseContext.Database.BeginTransaction())
+            {
+                var account = new Account()
+                {
+                    FirstName = accountapi.FirstName,
+                    LastName = accountapi.LastName,
+                    Phone = accountapi.Phone,
+                    Email = accountapi.Email,
+                    Password = accountapi.Password,
+                    Status = false,
+                    Avatar = accountapi.Avatar,
+                    CreatedAt = accountapi.CreatedAt,
+                    UpdatedAt = accountapi.UpdatedAt,
+                    SecurityCode = accountapi.SecurityCode,
+                };
+                _databaseContext.Accounts.Add(account);
+                _databaseContext.SaveChanges();
+
+                _databaseContext.AccountRoles.Add(new AccountRole()
+                {
+                    AccountId = account.Id,
+                    RoleId = 3,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                });
+                var a = _databaseContext.SaveChanges();
+                transaction.Commit();
+                return a > 0;
+            }
+        }
+        catch
+        {
+            using (var transaction = _databaseContext.Database.BeginTransaction())
+            {
+                transaction.Rollback();
+                return false;
+            }
         }
     }
 }

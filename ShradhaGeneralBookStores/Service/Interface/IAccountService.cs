@@ -18,4 +18,6 @@ public interface IAccountService
     public bool EnableAccount(int id);
     public dynamic UpdateProfile(Profile profile, IFormFile? avatar = null);
     public bool ChangePassword(ChangePassword changePassword);
+
+    public bool Register(AccountAPI accountapi);
 }
