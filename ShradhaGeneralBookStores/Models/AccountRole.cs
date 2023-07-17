@@ -13,7 +13,7 @@ public partial class AccountRole
 
     public DateTime UpdatedAt { get; set; }
 
-    public virtual Account Account { get; set; } = null!;
+    public virtual Account? Account { get; set; } = null!;
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role? Role { get; set; } = null!;
 }
