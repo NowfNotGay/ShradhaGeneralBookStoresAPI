@@ -531,6 +531,7 @@ public class ProductService : IProductService
     public dynamic ReadForSimilar(int id)
     {
         var product = _databaseContext.Products.FirstOrDefault(p=>p.Id == id);
+        
         return _databaseContext.Products
             .Include(p => p.ProductAuthors)
             .ThenInclude(pa => pa.Author)

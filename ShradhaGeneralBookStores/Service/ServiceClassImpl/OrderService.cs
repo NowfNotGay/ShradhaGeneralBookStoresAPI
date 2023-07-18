@@ -34,9 +34,9 @@ public class OrderService : IOrderService
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
 
-
                 _databaseContext.Orders.Add(order);
                 _databaseContext.SaveChanges();
+                
                 foreach(var item in orderAPI.ListOrderDetail)
                 {
                     _databaseContext.OrderDetails.Add(
@@ -50,6 +50,9 @@ public class OrderService : IOrderService
                              CreatedAt= DateTime.Now,
                          }
                     );
+                    var product = _databaseContext.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                    product.Quantity -= item.Quantity;
+                    _databaseContext.Products.Update(product);
                 }
                 var a = _databaseContext.SaveChanges();
                 transaction.Commit();
