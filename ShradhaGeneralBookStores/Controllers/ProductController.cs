@@ -89,7 +89,7 @@ public class ProductController : ControllerBase
         {
             return BadRequest();
         }
-    } 
+    }
 
     [Produces("application/json")]
     [HttpGet("ReadForAuthorUser")]
@@ -150,11 +150,11 @@ public class ProductController : ControllerBase
 
     [Produces("application/json")]
     [HttpGet("ReadByPrice")]
-    public IActionResult ReadByPrice(int min,int max)
+    public IActionResult ReadByPrice(int min, int max)
     {
         try
         {
-            return Ok(_productService.ReadByPrice(min,max));
+            return Ok(_productService.ReadByPrice(min, max));
         }
         catch
         {
@@ -282,4 +282,32 @@ public class ProductController : ControllerBase
         }
     }
     // end enable
+
+    [Produces("application/json")]
+    [HttpGet("ReadForHot")]
+    public IActionResult ReadForHot()
+    {
+        try
+        {
+            return Ok(_productService.ReadForHot());
+        }
+        catch 
+        { 
+            return BadRequest(); 
+        }
+    }
+
+    [Produces("application/json")]
+    [HttpGet("ReadForSimilar")]
+    public IActionResult ReadForSimilar(int id)
+    {
+        try
+        {
+            return Ok(_productService.ReadForSimilar(id));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }

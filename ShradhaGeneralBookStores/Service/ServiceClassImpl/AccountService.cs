@@ -94,7 +94,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == true && a.SecurityCode != "-1");
+            var account = _databaseContext.Accounts.FirstOrDefault(a => a.Email == email && a.Status == true);
             if (account == null)
             {
                 return false;

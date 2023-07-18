@@ -498,4 +498,66 @@ public class ProductService : IProductService
             return false;
         }
     }
+
+    public dynamic ReadForHot() => _databaseContext.Products
+            .Include(p => p.ProductAuthors)
+            .ThenInclude(pa => pa.Author)
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.ProductImages)
+            .Where(p => p.Status == true)
+            .OrderByDescending(p => p.Status)
+            .ThenByDescending(p=>p.Cost)
+            .Take(4)
+            .Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Description,
+                p.Quantity,
+                p.Price,
+                p.Cost,
+                p.PublisherId,
+                p.Status,
+                p.Hot,
+                p.PublishingYear,
+                p.CreatedAt,
+                p.UpdatedAt,
+                Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+                Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+                Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
+            });
+
+    public dynamic ReadForSimilar(int id)
+    {
+        var product = _databaseContext.Products.FirstOrDefault(p=>p.Id == id);
+        return _databaseContext.Products
+            .Include(p => p.ProductAuthors)
+            .ThenInclude(pa => pa.Author)
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.ProductImages)
+            .Where(p => p.ProductCategories.Contains(product.ProductCategories.FirstOrDefault()!))
+            .OrderByDescending(p => p.Status)
+            .ThenByDescending(p => p.Cost)
+            .Take(4)
+            .Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Description,
+                p.Quantity,
+                p.Price,
+                p.Cost,
+                p.PublisherId,
+                p.Status,
+                p.Hot,
+                p.PublishingYear,
+                p.CreatedAt,
+                p.UpdatedAt,
+                Authors = p.ProductAuthors.Select(pa => pa.Author.Name),
+                Categories = p.ProductCategories.Select(pc => pc.Category.Name),
+                Photos = p.ProductImages.Where(pi => pi.ProductId == p.Id).Select(pi => _configuration["BaseURL"] + "Images/ProductImages/" + pi.ImagePath)
+            });
+    }
 }
