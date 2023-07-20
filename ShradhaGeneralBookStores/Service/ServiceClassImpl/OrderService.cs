@@ -52,6 +52,10 @@ public class OrderService : IOrderService
                     );
                     var product = _databaseContext.Products.FirstOrDefault(p => p.Id == item.ProductId);
                     product.Quantity -= item.Quantity;
+                    if(product.Quantity <= 0)
+                    {
+                        product.Status = false;
+                    }
                     _databaseContext.Products.Update(product);
                 }
                 var a = _databaseContext.SaveChanges();
